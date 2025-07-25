@@ -1,12 +1,28 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - v5-develop
-      - v5-main
-    paths-ignore:
-      - "src/Sonarr.Api.*/openapi.json"
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: "deploy"
+        type: boolean
+        default: true
+        required: true
+      branch:
+        description: "Git branch used for this build"
+        type: string
+        default: "v5-develop"
+        required: true
+      version:
+        description: "Sonarr version"
+        type: string
+        required: true
+ # push:
+ #   branches:
+ #     - v5-develop
+ #     - v5-main
+ #   paths-ignore:
+ #     - "src/Sonarr.Api.*/openapi.json"
   pull_request:
     branches:
       - v5-develop
