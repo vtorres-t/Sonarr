@@ -28,26 +28,27 @@ jobs:
     strategy:
       matrix:
         include:
+ # Errores freebsb       
  #         - runtime: freebsd-x64
  #           os: ubuntu-latest
-          - runtime: linux-arm
-            os: ubuntu-latest
-          - runtime: linux-arm64
-            os: ubuntu-latest
-          - runtime: linux-musl-arm64
-            os: ubuntu-latest
+ #         - runtime: linux-arm
+ #           os: ubuntu-latest
+ #         - runtime: linux-arm64
+ #           os: ubuntu-latest
+ #         - runtime: linux-musl-arm64
+ #           os: ubuntu-latest
           - runtime: linux-musl-x64
             os: ubuntu-latest
           - runtime: linux-x64
             os: ubuntu-latest
-          - runtime: osx-arm64
-            os: ubuntu-latest
-          - runtime: osx-x64
-            os: ubuntu-latest
+ #         - runtime: osx-arm64
+ #           os: ubuntu-latest
+ #         - runtime: osx-x64
+ #           os: ubuntu-latest
           - runtime: win-x64
             os: windows-latest
-          - runtime: win-x86
-            os: windows-latest
+ #         - runtime: win-x86
+ #           os: windows-latest
 
     runs-on: ${{ matrix.os }}
     steps:
