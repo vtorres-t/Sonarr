@@ -234,7 +234,6 @@ jobs:
         unit_test_postgres,
         integration_test,
       ]
-    secrets: inherit
     uses: ./.github/workflows/deploy.yml
     with:
       framework: ${{ needs.prepare.outputs.framework }}
