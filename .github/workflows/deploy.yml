@@ -168,4 +168,4 @@ jobs:
           echo "Publishing update $version ($branch) to: $url"
           echo "$json"
 
-          curl -H "Content-Type: application/json" -H "X-Api-Key: ${{ secrets.SERVICES_API_KEY }}" -X POST -d "$json" --fail-with-body $url
+          #curl -H "Content-Type: application/json" -H "X-Api-Key: ${{ secrets.SERVICES_API_KEY }}" -X POST -d "$json" --fail-with-body $url
