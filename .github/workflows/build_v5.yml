@@ -48,9 +48,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runtime: freebsd-x64
-            package_tests: false
-            os: ubuntu-latest
+ #         - runtime: freebsd-x64
+ #           package_tests: false
+ #           os: ubuntu-latest
           - runtime: linux-arm
             package_tests: false
             os: ubuntu-latest
