@@ -204,7 +204,7 @@ jobs:
           binary_path: ${{ matrix.binary_path }}
 
   deploy:
-    if: ${{ github.ref_name == 'v5-develop-final' || github.ref_name == 'v5-main-final' }}
+    if: ${{ github.ref_name == 'release' || github.ref_name == 'v5-main-final' }}
     needs:
       [
         prepare,
