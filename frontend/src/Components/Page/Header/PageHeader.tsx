@@ -67,7 +67,6 @@ function PageHeader() {
       <SeriesSearchInput />
 
       <div className={styles.right}>
-
         <PageHeaderActionsMenu
           onKeyboardShortcutsPress={handleOpenKeyboardShortcutsModal}
         />
