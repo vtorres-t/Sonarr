@@ -37,9 +37,9 @@ concurrency:
 
 env:
   FRAMEWORK: net9.0
-  RAW_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  RAW_BRANCH_NAME: ${{ inputs.branch || github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 5
-  VERSION: ${{ inputs.version || '5.0.2' }}
+  VERSION: ${{ inputs.version }}
 
 jobs:
   prepare:
