@@ -17,10 +17,4 @@
     <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
     <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="coverlet.collector" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 </Project>
