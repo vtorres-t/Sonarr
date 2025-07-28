@@ -3,7 +3,7 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import SettingsToolbar from 'Settings/SettingsToolbar';
 import translate from 'Utilities/String/translate';
-import TheTvdb from './TheTvdb';
+
 
 function MetadataSourceSettings() {
   return (
@@ -11,7 +11,7 @@ function MetadataSourceSettings() {
       <SettingsToolbar showSave={false} />
 
       <PageContentBody>
-        <TheTvdb />
+       
       </PageContentBody>
     </PageContent>
   );
