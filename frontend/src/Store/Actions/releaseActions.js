@@ -65,7 +65,29 @@ export const defaultState = {
     {
       key: 'all',
       label: () => translate('All'),
-      filters: []
+      filters: [
+        {
+          key: 'customFormatScore',
+          value: 10,
+          type: filterTypes.GREATER_THAN_OR_EQUAL
+        }
+      ]
+    },
+    {
+      key: 'recent',
+      label: () => translate('Recent'),
+      filters: [
+        {
+          key: 'age',
+          value: 3,
+          type: filterTypes.LESS_THAN_OR_EQUAL
+        },
+        {
+          key: 'customFormatScore',
+          value: 10,
+          type: filterTypes.GREATER_THAN_OR_EQUAL
+        }
+      ]
     },
     {
       key: 'season-pack',
@@ -75,6 +97,11 @@ export const defaultState = {
           key: 'fullSeason',
           value: true,
           type: filterTypes.EQUAL
+        },
+        {
+          key: 'customFormatScore',
+          value: 10,
+          type: filterTypes.GREATER_THAN_OR_EQUAL
         }
       ]
     },
@@ -86,6 +113,11 @@ export const defaultState = {
           key: 'fullSeason',
           value: false,
           type: filterTypes.EQUAL
+        },
+        {
+          key: 'customFormatScore',
+          value: 10,
+          type: filterTypes.GREATER_THAN_OR_EQUAL
         }
       ]
     }
