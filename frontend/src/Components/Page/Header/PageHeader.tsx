@@ -68,14 +68,6 @@ function PageHeader() {
       <SeriesSearchInput />
 
       <div className={styles.right}>
-        <IconButton
-          className={styles.donate}
-          name={icons.HEART}
-          aria-label={translate('Donate')}
-          to="https://sonarr.tv/donate.html"
-          size={14}
-          title={translate('Donate')}
-        />
 
         <PageHeaderActionsMenu
           onKeyboardShortcutsPress={handleOpenKeyboardShortcutsModal}
