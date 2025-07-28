@@ -88,7 +88,6 @@ function Settings() {
           {translate('MetadataSource')}
         </Link>
 
-
         <Link className={styles.link} to="/settings/tags">
           {translate('Tags')}
         </Link>
