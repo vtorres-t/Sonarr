@@ -16,7 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Memory" Version="4.6.0" />
+    <PackageReference Include="System.Memory" Version="4.6.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.7" />
@@ -24,7 +24,7 @@
     <PackageReference Include="Servarr.FluentMigrator.Runner.SQLite" Version="3.3.2.9" />
     <PackageReference Include="Servarr.FluentMigrator.Runner.Postgres" Version="3.3.2.9" />
     <PackageReference Include="FluentValidation" Version="9.5.4" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog" Version="5.3.4" />
     <PackageReference Include="MonoTorrent" Version="3.0.2" />

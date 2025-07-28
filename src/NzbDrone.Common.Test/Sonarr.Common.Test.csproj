@@ -15,4 +15,10 @@
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Dummy\Sonarr.Test.Dummy.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
