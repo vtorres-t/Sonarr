@@ -4,8 +4,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" />
-    <PackageReference Include="Selenium.Support" Version="3.141.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="134.0.6998.16500" />
+    <PackageReference Include="Selenium.Support" Version="4.34.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="138.0.7204.16800" />
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,5 +20,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.14.1" />
   </ItemGroup>
 </Project>
