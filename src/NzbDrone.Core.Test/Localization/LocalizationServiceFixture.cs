@@ -30,13 +30,13 @@ namespace NzbDrone.Core.Test.Localization
         }
 
         [Test]
-        public void should_get_string_in_french()
+        public void should_get_string_in_spanish()
         {
-            Mocker.GetMock<IConfigService>().Setup(m => m.UILanguage).Returns((int)Language.French);
+            Mocker.GetMock<IConfigService>().Setup(m => m.UILanguage).Returns((int)Language.Spanish);
 
             var localizedString = Subject.GetLocalizedString("UiLanguage");
 
-            localizedString.Should().Be("Langue de l'interface utilisateur");
+            localizedString.Should().Be("Idioma de interfaz");
 
             ExceptionVerification.ExpectedErrors(1);
         }
