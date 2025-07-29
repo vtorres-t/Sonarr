@@ -6,7 +6,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Localization
 {
@@ -37,8 +36,6 @@ namespace NzbDrone.Core.Test.Localization
             var localizedString = Subject.GetLocalizedString("UiLanguage");
 
             localizedString.Should().Be("Idioma de interfaz");
-
-            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]

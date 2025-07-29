@@ -1,23 +1,12 @@
-name: Build
+name: Build Auto
 
 on:
-  workflow_dispatch:
-    inputs:
-      deploy:
-        description: "deploy"
-        type: boolean
-        default: true
-        required: true
-      branch:
-        description: "Git branch used for this build"
-        type: string
-        default: "devel"
-        required: true
-      version:
-        description: "Sonarr version"
-        type: string
-        default: "5.0.0"
-        required: true
+  pull_request:
+    branches:
+      - devel
+    paths-ignore:
+      - "src/NzbDrone.Core/Localization/Core/**"
+      - "src/Sonarr.Api.*/openapi.json"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -210,22 +199,4 @@ jobs:
           integration_tests: true
           binary_artifact: ${{ matrix.binary_artifact }}
           binary_path: ${{ matrix.binary_path }}
-
-  deploy:
-    if: ${{ inputs.deploy }}
-    needs:
-      [
-        prepare,
-        backend,
-        frontend,
-        unit_test,
-        unit_test_postgres,
-        integration_test,
-      ]
-    uses: ./.github/workflows/deploy.yml
-    with:
-      framework: ${{ needs.prepare.outputs.framework }}
-      branch: ${{ github.ref_name }}
-      major_version: ${{ needs.prepare.outputs.major_version }}
-      version: ${{ needs.prepare.outputs.version }}
 
