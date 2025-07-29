@@ -27,8 +27,8 @@ export const defaultState = {
   isPopulated: false,
   error: null,
   items: [],
-  sortKey: 'releaseWeight',
-  sortDirection: sortDirections.ASCENDING,
+  sortKey: 'customFormatScore',
+  sortDirection: sortDirections.DESCENDING,
   sortPredicates: {
     age: function(item, direction) {
       return item.ageMinutes;
@@ -68,7 +68,7 @@ export const defaultState = {
       filters: [
         {
           key: 'customFormatScore',
-          value: 10,
+          value: 1,
           type: filterTypes.GREATER_THAN_OR_EQUAL
         }
       ]
@@ -84,7 +84,7 @@ export const defaultState = {
         },
         {
           key: 'customFormatScore',
-          value: 10,
+          value: 1,
           type: filterTypes.GREATER_THAN_OR_EQUAL
         }
       ]
@@ -100,7 +100,7 @@ export const defaultState = {
         },
         {
           key: 'customFormatScore',
-          value: 10,
+          value: 1,
           type: filterTypes.GREATER_THAN_OR_EQUAL
         }
       ]
@@ -116,7 +116,7 @@ export const defaultState = {
         },
         {
           key: 'customFormatScore',
-          value: 10,
+          value: 1,
           type: filterTypes.GREATER_THAN_OR_EQUAL
         }
       ]

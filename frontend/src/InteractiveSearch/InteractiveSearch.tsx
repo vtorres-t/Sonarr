@@ -84,6 +84,7 @@ const columns: Column[] = [
       title: () => translate('CustomFormatScore'),
     }),
     isSortable: true,
+    fixedSortDirection: sortDirections.DESCENDING,
     isVisible: true,
   },
   {
