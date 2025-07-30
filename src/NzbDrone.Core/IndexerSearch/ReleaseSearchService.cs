@@ -563,9 +563,8 @@ namespace NzbDrone.Core.IndexerSearch
             try
             {
                 filterDownloadDecisions = filterDownloadDecisions
-                        .Where(w => w.RemoteEpisode.Episodes.FirstOrDefault() != null
-                                    && w.RemoteEpisode.Episodes.FirstOrDefault().AirDateUtc.HasValue
-                                    && Math.Abs(w.RemoteEpisode.Release.PublishDate.Subtract(w.RemoteEpisode.Episodes.First().AirDateUtc.Value).TotalDays) <= 10)
+                        .Where(w => w.RemoteEpisode.ParsedEpisodeInfo.IsDaily
+                                    && Math.Abs(w.RemoteEpisode.ParsedEpisodeInfo.AirDateDT.Value.Subtract(w.RemoteEpisode.Release.PublishDate).TotalDays) <= 10)
                         .ToList();
             }
             catch (Exception ex)
