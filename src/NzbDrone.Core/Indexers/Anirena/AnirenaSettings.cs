@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Equ;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
@@ -14,9 +13,6 @@ namespace NzbDrone.Core.Indexers.Anirena
         public AnirenaSettingsValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
-
-            // RuleFor(c => c.AdditionalParameters).Matches("(&[a-z]+=[a-z0-9_]+)*", RegexOptions.IgnoreCase);
-
             RuleFor(c => c.SeedCriteria).SetValidator(_ => new SeedCriteriaSettingsValidator());
         }
     }
