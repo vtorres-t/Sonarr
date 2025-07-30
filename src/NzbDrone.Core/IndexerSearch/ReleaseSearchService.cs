@@ -559,8 +559,21 @@ namespace NzbDrone.Core.IndexerSearch
 
         private List<DownloadDecision> DeDupeDecisions(List<DownloadDecision> decisions)
         {
+            var filterDownloadDecisions = decisions;
+            try
+            {
+                filterDownloadDecisions = filterDownloadDecisions
+                        .Where(w => w.RemoteEpisode.ParsedEpisodeInfo.IsDaily
+                                    && Math.Abs(w.RemoteEpisode.ParsedEpisodeInfo.AirDateDT.Value.Subtract(w.RemoteEpisode.Release.PublishDate).TotalDays) <= 10)
+                        .ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error DeDupeDecisions in filterDownloadDecisions.");
+            }
+
             // De-dupe reports by guid so duplicate results aren't returned. Pick the one with the least rejections and higher indexer priority.
-            return decisions.GroupBy(d => d.RemoteEpisode.Release.Guid)
+            return filterDownloadDecisions.GroupBy(d => d.RemoteEpisode.Release.Guid)
                 .Select(d => d.OrderBy(v => v.Rejections.Count()).ThenBy(v => v.RemoteEpisode?.Release?.IndexerPriority ?? IndexerDefinition.DefaultPriority).First())
                 .ToList();
         }

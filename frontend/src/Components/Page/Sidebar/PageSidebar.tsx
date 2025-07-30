@@ -146,10 +146,6 @@ const LINKS: SidebarItem[] = [
         to: '/settings/metadata',
       },
       {
-        title: () => translate('MetadataSource'),
-        to: '/settings/metadatasource',
-      },
-      {
         title: () => translate('Tags'),
         to: '/settings/tags',
       },

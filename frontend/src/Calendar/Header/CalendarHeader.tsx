@@ -67,15 +67,15 @@ function CalendarHeader() {
       return translate('Agenda');
     }
 
-    let startFormat = 'MMM D YYYY';
-    let endFormat = 'MMM D YYYY';
+    let startFormat = 'D MMM YYYY';
+    let endFormat = 'D MMM YYYY';
 
     if (startMoment.isSame(endMoment, 'month')) {
-      startFormat = 'MMM D';
+      startFormat = 'D MMM';
       endFormat = 'D YYYY';
     } else if (startMoment.isSame(endMoment, 'year')) {
-      startFormat = 'MMM D';
-      endFormat = 'MMM D YYYY';
+      startFormat = 'D MMM';
+      endFormat = 'D MMM YYYY';
     }
 
     return `${startMoment.format(startFormat)} \u2014 ${endMoment.format(
