@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Indexers.Anirena
 
         public override IParseIndexerResponse GetParser()
         {
-            return new TorrentRssParser() { UseGuidInfoUrl = true, SizeElementName = "size", InfoHashElementName = "infoHash", PeersElementName = "leechers", CalculatePeersAsSum = true, SeedsElementName = "seeders" };
+            return new AnirenaTorrentRssParser() { UseGuidInfoUrl = true, ParseSeedersInDescription = true, MagnetElementName = "magnetURI", SizeElementName = "description", InfoHashElementName = "infoHash", PeersElementName = "description", CalculatePeersAsSum = true, SeedsElementName = "description" };
         }
     }
 }

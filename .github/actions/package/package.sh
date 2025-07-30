@@ -20,9 +20,14 @@ do
   fi
     
   echo "Creating package for $name"
+  
+  echo "Clean UI"
+  rm -rf $uiFolder/*.map
 
   echo "Copying UI"
   cp -r $uiFolder $sonarrFolder
+  
+
   
   echo "Setting permissions"
   find $sonarrFolder -name "ffprobe" -exec chmod a+x {} \;
