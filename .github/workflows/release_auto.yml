@@ -111,6 +111,9 @@ jobs:
         with:
           name: build_ui
           path: _output/UI/**/*
+          
+      - name: Clean
+        run: rm -rf _output/UI/*.map
 
   unit_test:
     needs: backend
