@@ -1,7 +1,9 @@
 name: Release Auto
 
 on:
-  pull_request:
+  pull_request_target:
+    types:
+      - closed
     branches:
       - main
 
@@ -111,9 +113,6 @@ jobs:
         with:
           name: build_ui
           path: _output/UI/**/*
-          
-      - name: Clean
-        run: rm -rf _output/UI/*.map
 
   unit_test:
     needs: backend

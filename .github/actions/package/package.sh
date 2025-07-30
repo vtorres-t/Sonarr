@@ -24,6 +24,9 @@ do
   echo "Copying UI"
   cp -r $uiFolder $sonarrFolder
   
+  echo "Clean UI"
+  rm -rf $sonarrFolder/*.map
+  
   echo "Setting permissions"
   find $sonarrFolder -name "ffprobe" -exec chmod a+x {} \;
   find $sonarrFolder -name "Sonarr" -exec chmod a+x {} \;
