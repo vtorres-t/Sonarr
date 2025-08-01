@@ -42,15 +42,15 @@ export const defaultState = {
   searchMissingCommandId: null,
 
   options: {
-    collapseMultipleEpisodes: false,
+    collapseMultipleEpisodes: true,
     showEpisodeInformation: true,
-    showFinaleIcon: false,
-    showSpecialIcon: false,
+    showFinaleIcon: true,
+    showSpecialIcon: true,
     showCutoffUnmetIcon: false,
-    fullColorEvents: false
+    fullColorEvents: true
   },
 
-  selectedFilterKey: 'monitored',
+  selectedFilterKey: 'all',
 
   filters: [
     {
