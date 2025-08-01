@@ -149,7 +149,7 @@ export const defaultState = {
         name: 'size',
         label: () => translate('Size'),
         isSortable: true,
-        isVisible: false
+        isVisible: true
       },
       {
         name: 'outputPath',
