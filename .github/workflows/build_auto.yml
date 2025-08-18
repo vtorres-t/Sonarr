@@ -1,15 +1,9 @@
-name: Build
+name: Build Auto
 
 on:
-  push:
-    branches:
-      - v5-develop
-      - v5-main
-    paths-ignore:
-      - "src/Sonarr.Api.*/openapi.json"
   pull_request:
     branches:
-      - v5-develop
+      - devel
     paths-ignore:
       - "src/NzbDrone.Core/Localization/Core/**"
       - "src/Sonarr.Api.*/openapi.json"
@@ -19,10 +13,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  FRAMEWORK: net8.0
-  RAW_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  FRAMEWORK: net9.0
+  RAW_BRANCH_NAME: ${{ inputs.branch || github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 5
-  VERSION: 5.0.0
+  VERSION: ${{ inputs.version || '5.0.0' }}
 
 jobs:
   prepare:
@@ -48,36 +42,37 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runtime: freebsd-x64
-            package_tests: false
-            os: ubuntu-latest
-          - runtime: linux-arm
-            package_tests: false
-            os: ubuntu-latest
-          - runtime: linux-arm64
-            package_tests: false
-            os: ubuntu-latest
-          - runtime: linux-musl-arm64
-            package_tests: false
-            os: ubuntu-latest
+ # ERRORS FREEBSD
+ #         - runtime: freebsd-x64
+ #           package_tests: false
+ #           os: ubuntu-latest
+ #         - runtime: linux-arm
+ #           package_tests: false
+ #           os: ubuntu-latest
+ #         - runtime: linux-arm64
+ #           package_tests: false
+ #           os: ubuntu-latest
+ #         - runtime: linux-musl-arm64
+ #           package_tests: false
+ #           os: ubuntu-latest
           - runtime: linux-musl-x64
             package_tests: false
             os: ubuntu-latest
           - runtime: linux-x64
             package_tests: true
             os: ubuntu-latest
-          - runtime: osx-arm64
-            package_tests: true
-            os: ubuntu-latest
-          - runtime: osx-x64
-            package_tests: false
-            os: ubuntu-latest
+ #         - runtime: osx-arm64
+ #           package_tests: true
+ #           os: ubuntu-latest
+ #         - runtime: osx-x64
+ #           package_tests: false
+ #           os: ubuntu-latest
           - runtime: win-x64
             package_tests: true
             os: ubuntu-latest
-          - runtime: win-x86
-            package_tests: false
-            os: ubuntu-latest
+ #         - runtime: win-x86
+ #           package_tests: false
+ #           os: ubuntu-latest
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -125,14 +120,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+ #      os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             artifact: tests-linux-x64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
-          - os: macos-latest
-            artifact: tests-osx-arm64
-            filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
+  #        - os: macos-latest
+  #          artifact: tests-osx-arm64
+  #          filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
           - os: windows-latest
             artifact: tests-win-x64
             filter: TestCategory!=ManualTest&TestCategory!=LINUX&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
@@ -170,18 +166,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+#       os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             artifact: tests-linux-x64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
             binary_artifact: build-linux-x64
             binary_path: linux-x64/${{ needs.prepare.outputs.framework }}/Sonarr
-          - os: macos-latest
-            artifact: tests-osx-arm64
-            filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
-            binary_artifact: build-osx-arm64
-            binary_path: osx-arm64/${{ needs.prepare.outputs.framework }}/Sonarr
+ #         - os: macos-latest
+ #           artifact: tests-osx-arm64
+ #           filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
+ #           binary_artifact: build-osx-arm64
+ #           binary_path: osx-arm64/${{ needs.prepare.outputs.framework }}/Sonarr
           - os: windows-latest
             artifact: tests-win-x64
             filter: TestCategory!=ManualTest&TestCategory!=LINUX&TestCategory=IntegrationTest
@@ -203,52 +200,3 @@ jobs:
           binary_artifact: ${{ matrix.binary_artifact }}
           binary_path: ${{ matrix.binary_path }}
 
-  deploy:
-    if: ${{ github.ref_name == 'v5-develop-final' || github.ref_name == 'v5-main-final' }}
-    needs:
-      [
-        prepare,
-        backend,
-        frontend,
-        unit_test,
-        unit_test_postgres,
-        integration_test,
-      ]
-    secrets: inherit
-    uses: ./.github/workflows/deploy.yml
-    with:
-      framework: ${{ needs.prepare.outputs.framework }}
-      branch: ${{ github.ref_name }}
-      major_version: ${{ needs.prepare.outputs.major_version }}
-      version: ${{ needs.prepare.outputs.version }}
-
-  notify:
-    name: Discord Notification
-    needs:
-      [
-        prepare,
-        backend,
-        frontend,
-        unit_test,
-        unit_test_postgres,
-        integration_test,
-        deploy,
-      ]
-    if: ${{ !cancelled() && (github.ref_name == 'v5-develop-final' || github.ref_name == 'v5-main-final') }}
-    env:
-      STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Notify
-        uses: tsickert/discord-webhook@v6.0.0
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          username: "GitHub Actions"
-          avatar-url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-          embed-title: "${{ github.workflow }}: ${{ env.STATUS == 'success' && 'Success' || 'Failure' }}"
-          embed-url: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          embed-description: |
-            **Branch** ${{ github.ref }}
-            **Build** ${{ needs.prepare.outputs.version }}
-          embed-color: ${{ env.STATUS == 'success' && '3066993' || '15158332' }}

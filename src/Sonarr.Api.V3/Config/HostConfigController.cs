@@ -60,7 +60,6 @@ namespace Sonarr.Api.V3.Config
                 .NotEmpty()
                 .IsValidPath()
                 .SetValidator(fileExistsValidator)
-                .IsValidCertificate()
                 .When(c => c.EnableSsl);
 
             SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);

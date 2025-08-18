@@ -96,6 +96,11 @@ runs:
 
         IFS='-' read -ra SPLIT <<< "$runtime"
 
+        rm -rf _output/$framework/$runtime/publish/*.xml
+        rm -rf _output/$framework/$runtime/publish/*.pdb
+        rm -rf _output/Sonarr.Update/$framework/$runtime/publish/*.xml
+        rm -rf _output/Sonarr.Update/$framework/$runtime/publish/*.pdb
+        
         case "${SPLIT[0]}" in
           linux|freebsd*)
             folder=_artifacts/$runtime/$framework/Sonarr
@@ -103,6 +108,7 @@ runs:
             echo "Packaging files"
             rm -rf $folder
             mkdir -p $folder
+            
             cp -r _output/$framework/$runtime/publish/* $folder
             cp -r _output/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
             cp LICENSE.md $folder

@@ -128,8 +128,8 @@
     <PackageReference Include="NunitXml.TestLogger" Version="3.0.131" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TestProject)'=='true' and '$(TargetFramework)'=='net8.0'">
-    <PackageReference Include="coverlet.collector" Version="3.0.4-preview.27.ge7cb7c3b40" />
+  <ItemGroup Condition="'$(TestProject)'=='true' and '$(TargetFramework)'=='net9.0'">
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(SonarrProject)'=='true' and '$(EnableAnalyzers)'=='false'">

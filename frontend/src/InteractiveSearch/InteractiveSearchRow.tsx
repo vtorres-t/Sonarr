@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
+// import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
@@ -166,10 +166,11 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
   return (
     <TableRow>
+      {/*
       <TableRowCell className={styles.protocol}>
         <ProtocolLabel protocol={protocol} />
       </TableRowCell>
-
+      */}
       <TableRowCell
         className={styles.age}
         title={formatDateTime(publishDate, longDateFormat, timeFormat, {
@@ -178,7 +179,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       >
         {formatAge(age, ageHours, ageMinutes)}
       </TableRowCell>
-
       <TableRowCell>
         <div className={styles.titleContent}>
           <Link to={infoUrl}>{title}</Link>
@@ -196,25 +196,19 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           />
         </div>
       </TableRowCell>
-
       <TableRowCell className={styles.indexer}>{indexer}</TableRowCell>
-
       <TableRowCell className={styles.size}>{formatBytes(size)}</TableRowCell>
-
       <TableRowCell className={styles.peers}>
         {protocol === 'torrent' ? (
           <Peers seeders={seeders} leechers={leechers} />
         ) : null}
       </TableRowCell>
-
       <TableRowCell className={styles.languages}>
         <EpisodeLanguages languages={languages} />
       </TableRowCell>
-
       <TableRowCell className={styles.quality}>
         <EpisodeQuality quality={quality} showRevision={true} />
       </TableRowCell>
-
       <TableRowCell className={styles.customFormatScore}>
         <Tooltip
           anchor={formatCustomFormatScore(
@@ -225,7 +219,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           position={tooltipPositions.LEFT}
         />
       </TableRowCell>
-
       <TableRowCell className={styles.indexerFlags}>
         {indexerFlags ? (
           <Popover
@@ -236,7 +229,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           />
         ) : null}
       </TableRowCell>
-
       <TableRowCell className={styles.rejected}>
         {rejections.length ? (
           <Popover
@@ -253,7 +245,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           />
         ) : null}
       </TableRowCell>
-
       <TableRowCell className={styles.download}>
         <SpinnerIconButton
           name={getDownloadIcon(isGrabbing, isGrabbed, grabError)}
@@ -283,7 +274,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           </div>
         </Link>
       </TableRowCell>
-
       <ConfirmModal
         isOpen={isConfirmGrabModalOpen}
         kind={kinds.WARNING}
@@ -295,7 +285,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         onConfirm={onGrabConfirm}
         onCancel={onGrabCancel}
       />
-
       <OverrideMatchModal
         isOpen={isOverrideModalOpen}
         title={title}

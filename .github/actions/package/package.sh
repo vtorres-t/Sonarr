@@ -3,7 +3,7 @@
 outputFolder=_output
 artifactsFolder=_artifacts
 uiFolder="$outputFolder/UI"
-framework="${FRAMEWORK:=net8.0}"
+framework="${FRAMEWORK:=net9.0}"
 
 rm -rf $artifactsFolder
 mkdir $artifactsFolder
@@ -20,9 +20,14 @@ do
   fi
     
   echo "Creating package for $name"
+  
+  echo "Clean UI"
+  rm -rf $uiFolder/*.map
 
   echo "Copying UI"
   cp -r $uiFolder $sonarrFolder
+  
+
   
   echo "Setting permissions"
   find $sonarrFolder -name "ffprobe" -exec chmod a+x {} \;

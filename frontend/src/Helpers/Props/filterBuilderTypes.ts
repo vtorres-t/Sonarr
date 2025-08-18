@@ -84,11 +84,11 @@ export const possibleFilterTypes: Record<
   exact: [
     {
       key: 'equal',
-      value: () => translate('FilterIs'),
+      value: () => translate('FilterEqual'),
     },
     {
       key: 'notEqual',
-      value: () => translate('FilterIsNot'),
+      value: () => translate('FilterNotEqual'),
     },
   ],
 
