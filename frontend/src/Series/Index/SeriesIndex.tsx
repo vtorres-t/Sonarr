@@ -266,14 +266,14 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
                 overflowComponent={SeriesIndexSelectAllMenuItem}
               />
 
-            <PageToolbarSeparator />
-            <ParseToolbarButton />
-            <PageToolbarButton
-              label={translate('ManualImport')}
-              iconName={icons.INTERACTIVE}
-              onPress={handleInteractiveImportPress}
-            />
-          </PageToolbarSection>
+              <PageToolbarSeparator />
+              <ParseToolbarButton />
+              <PageToolbarButton
+                label={translate('ManualImport')}
+                iconName={icons.INTERACTIVE}
+                onPress={handleInteractiveImportPress}
+              />
+            </PageToolbarSection>
 
             <PageToolbarSection
               alignContent={align.RIGHT}
@@ -371,25 +371,25 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
 
           {isSelectMode ? <SeriesIndexSelectFooter /> : null}
 
-        {view === 'posters' ? (
-          <SeriesIndexPosterOptionsModal
-            isOpen={isOptionsModalOpen}
-            onModalClose={onOptionsModalClose}
+          {view === 'posters' ? (
+            <SeriesIndexPosterOptionsModal
+              isOpen={isOptionsModalOpen}
+              onModalClose={onOptionsModalClose}
+            />
+          ) : null}
+          {view === 'overview' ? (
+            <SeriesIndexOverviewOptionsModal
+              isOpen={isOptionsModalOpen}
+              onModalClose={onOptionsModalClose}
+            />
+          ) : null}
+          <InteractiveImportModal
+            isOpen={isInteractiveImportModalOpen}
+            onModalClose={handleInteractiveImportModalClose}
           />
-        ) : null}
-        {view === 'overview' ? (
-          <SeriesIndexOverviewOptionsModal
-            isOpen={isOptionsModalOpen}
-            onModalClose={onOptionsModalClose}
-          />
-        ) : null}
-        <InteractiveImportModal
-           isOpen={isInteractiveImportModalOpen}
-           onModalClose={handleInteractiveImportModalClose}
-        />
-      </PageContent>
-    </SelectProvider>
-   </QueueDetailsProvider>
+        </PageContent>
+      </SelectProvider>
+    </QueueDetailsProvider>
   );
 }, 'seriesIndex');
 

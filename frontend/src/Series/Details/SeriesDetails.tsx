@@ -791,12 +791,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                   />
                 </div>
 
-              <div className={styles.overview}>{overview}</div>
-
-              <MetadataAttribution />
+                <div className={styles.overview}>{overview}</div>
+              </div>
             </div>
           </div>
-        </div>
 
           <div className={styles.contentContainer}>
             {!isPopulated && !episodesError && !episodeFilesError ? (
