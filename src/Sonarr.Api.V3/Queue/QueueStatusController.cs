@@ -15,13 +15,13 @@ namespace Sonarr.Api.V3.Queue
 {
     [V3ApiController("queue/status")]
     public class QueueStatusController : RestControllerWithSignalR<QueueStatusResource, NzbDrone.Core.Queue.Queue>,
-                               IHandle<QueueUpdatedEvent>, IHandle<PendingReleasesUpdatedEvent>
+                               IHandle<ObsoleteQueueUpdatedEvent>, IHandle<PendingReleasesUpdatedEvent>
     {
-        private readonly IQueueService _queueService;
+        private readonly IObsoleteQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
         private readonly Debouncer _broadcastDebounce;
 
-        public QueueStatusController(IBroadcastSignalRMessage broadcastSignalRMessage, IQueueService queueService, IPendingReleaseService pendingReleaseService)
+        public QueueStatusController(IBroadcastSignalRMessage broadcastSignalRMessage, IObsoleteQueueService queueService, IPendingReleaseService pendingReleaseService)
             : base(broadcastSignalRMessage)
         {
             _queueService = queueService;
@@ -72,7 +72,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [NonAction]
-        public void Handle(QueueUpdatedEvent message)
+        public void Handle(ObsoleteQueueUpdatedEvent message)
         {
             _broadcastDebounce.Execute();
         }
