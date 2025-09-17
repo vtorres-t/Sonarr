@@ -6,9 +6,9 @@
   <ItemGroup>
     <PackageReference Include="DryIoc.dll" Version="5.4.3" />
 	<PackageReference Include="IPAddressRange" Version="6.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.7" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="5.3.4">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
@@ -29,7 +29,7 @@
 	<PackageReference Include="System.Data.SQLite" Version="2.0.2" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
     <PackageReference Include="System.ValueTuple" Version="4.6.1" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.7" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.9" />
     <PackageReference Remove="StyleCop.Analyzers" />
   </ItemGroup>
   <ItemGroup>
