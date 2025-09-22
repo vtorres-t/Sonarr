@@ -15,12 +15,4 @@
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
     <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="NUnit">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
-    <PackageReference Update="NUnit3TestAdapter">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
-  </ItemGroup>
 </Project>

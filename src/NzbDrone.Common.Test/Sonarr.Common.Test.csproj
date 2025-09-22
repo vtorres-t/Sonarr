@@ -14,9 +14,4 @@
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Dummy\Sonarr.Test.Dummy.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="NUnit">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
-  </ItemGroup>
 </Project>
