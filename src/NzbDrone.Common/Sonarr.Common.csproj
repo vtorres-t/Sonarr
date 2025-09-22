@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DryIoc.dll" Version="5.4.3" />
-	<PackageReference Include="IPAddressRange" Version="6.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
@@ -13,12 +12,6 @@
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
     <PackageReference Include="NLog.Layouts.ClefJsonLayout" Version="1.0.4" />
-    <PackageReference Include="NLog.Targets.Syslog" Version="7.0.0">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.15">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
 	<PackageReference Include="SourceGear.sqlite3" Version="3.50.4.2" />
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
