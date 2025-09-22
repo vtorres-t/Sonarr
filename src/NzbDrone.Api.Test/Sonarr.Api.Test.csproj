@@ -19,8 +19,5 @@
     <PackageReference Update="NUnit">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-    <PackageReference Update="NUnit3TestAdapter">
-      <TreatAsUsed>true</TreatAsUsed>
-    </PackageReference>
   </ItemGroup>
 </Project>
