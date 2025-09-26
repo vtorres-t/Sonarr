@@ -185,7 +185,7 @@ function CalendarEvent(props: CalendarEventProps) {
                     ? icons.FINALE_SERIES
                     : icons.FINALE_SEASON
                 }
-                kind={finaleType === 'series' ? kinds.DANGER : kinds.WARNING}
+                kind={finaleType === 'series' ? kinds.WARNING : kinds.WARNING}
                 title={getFinaleTypeName(finaleType)}
               />
             ) : null}

@@ -183,7 +183,7 @@ function CalendarEventGroup({
               }
               kind={
                 lastEpisode.finaleType === 'series'
-                  ? kinds.DANGER
+                  ? kinds.WARNING
                   : kinds.WARNING
               }
               title={getFinaleTypeName(lastEpisode.finaleType)}
