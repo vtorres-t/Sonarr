@@ -6,6 +6,7 @@ on:
       - closed
     branches:
       - main
+  workflow_dispatch: # Manual trigge
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
