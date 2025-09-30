@@ -175,6 +175,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[abc] My Series - 01 [简繁内封字幕]")]
         [TestCase("[ABC字幕组] My Series - 01 [HDTV]")]
         [TestCase("[喵萌奶茶屋&LoliHouse] 拳愿阿修罗 / Kengan Ashura - 17 [WebRip 1080p HEVC-10bit AAC][中日双语字幕]")]
+        [TestCase("Series.Towards.You.S01.国语音轨.2023.1080p.NF.WEB-DL.H264.DDP2.0-SeeWEB")]
         public void should_parse_language_chinese(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
@@ -543,6 +544,21 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = LanguageParser.ParseLanguages(postTitle);
             result.Should().BeEquivalentTo(new[] { Language.Russian, Language.Georgian });
+        }
+
+        [TestCase("The Boys S02 Eng Fre Ger Ita Por Spa 2160p WEBMux HDR10Plus HDR HEVC DDP SGF")]
+        public void should_parse_language_english_french_german_italian_portuguese_spanish(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().BeEquivalentTo(new[]
+            {
+                Language.English,
+                Language.French,
+                Language.German,
+                Language.Italian,
+                Language.Portuguese,
+                Language.Spanish
+            });
         }
 
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]

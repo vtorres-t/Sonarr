@@ -66,6 +66,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                             new OptionsWrapper<GeneratorOptions>(new GeneratorOptions()));
                     })
                 .AddScoped<IMigrationGenerator>(sp => sp.GetRequiredService<SQLiteGenerator>());
+
             return builder;
         }
     }
