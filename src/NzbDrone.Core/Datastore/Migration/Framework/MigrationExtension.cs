@@ -5,11 +5,16 @@ using FluentMigrator.Builders.Create.Table;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.BatchParser;
 using FluentMigrator.Runner.Generators;
+using FluentMigrator.Runner.Generators;
 using FluentMigrator.Runner.Generators.SQLite;
+using FluentMigrator.Runner.Initialization;
+using FluentMigrator.Runner.Processors;
 using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
 using FluentMigrator.Runner.Processors.SQLite;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -66,6 +71,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                             new OptionsWrapper<GeneratorOptions>(new GeneratorOptions()));
                     })
                 .AddScoped<IMigrationGenerator>(sp => sp.GetRequiredService<SQLiteGenerator>());
+
             return builder;
         }
     }
