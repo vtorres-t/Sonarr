@@ -741,8 +741,10 @@
   "FilterGreaterThanOrEqual": "greater than or equal",
   "FilterInLast": "in the last",
   "FilterInNext": "in the next",
+  "FilterIs": "is",
   "FilterIsAfter": "is after",
   "FilterIsBefore": "is before",
+  "FilterIsNot": "is not",
   "FilterLessThan": "less than",
   "FilterLessThanOrEqual": "less than or equal",
   "FilterNotEqual": "not equal",
@@ -2196,6 +2198,5 @@
   "Yes": "Yes",
   "YesCancel": "Yes, Cancel",
   "Yesterday": "Yesterday",
-  "YesterdayAt": "Yesterday at {time}",
-  "Recent": "Recent"
+  "YesterdayAt": "Yesterday at {time}"
 }
