@@ -25,6 +25,8 @@ interface PagedQueryResponse<T> {
   records: T[];
 }
 
+const DEFAULT_RECORDS: never[] = [];
+
 const usePagedApiQuery = <T>(options: PagedQueryOptions<T>) => {
   const { requestOptions, queryKey } = useMemo(() => {
     const {
@@ -64,12 +66,13 @@ const usePagedApiQuery = <T>(options: PagedQueryOptions<T>) => {
         headers: {
           ...options.headers,
           'X-Api-Key': window.Sonarr.apiKey,
+          'X-Sonarr-Client': 'Sonarr',
         },
       },
     };
   }, [options]);
 
-  return useQuery({
+  const { data, ...query } = useQuery({
     ...options.queryOptions,
     queryKey,
     queryFn: async ({ signal }) => {
@@ -87,6 +90,13 @@ const usePagedApiQuery = <T>(options: PagedQueryOptions<T>) => {
       };
     },
   });
+
+  return {
+    ...query,
+    records: data?.records ?? DEFAULT_RECORDS,
+    totalRecords: data?.totalRecords ?? 0,
+    totalPages: data?.totalPages ?? 0,
+  };
 };
 
 export default usePagedApiQuery;

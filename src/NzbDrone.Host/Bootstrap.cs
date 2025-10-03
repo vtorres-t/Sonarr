@@ -274,9 +274,10 @@ namespace NzbDrone.Host
         private static X509Certificate2 ValidateSslCertificate(string cert, string password)
         {
             X509Certificate2 certificate;
+
             try
             {
-                certificate = X509CertificateLoader.LoadCertificateFromFile(cert);
+                certificate = new X509Certificate2(cert, password, X509KeyStorageFlags.DefaultKeySet);
             }
             catch (CryptographicException ex)
             {
