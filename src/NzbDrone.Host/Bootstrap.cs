@@ -139,7 +139,6 @@ namespace NzbDrone.Host
             var sslPort = config.GetValue<int?>($"Sonarr:Server:{nameof(ServerOptions.SslPort)}") ?? config.GetValue(nameof(ConfigFileProvider.SslPort), 9898);
             var enableSsl = config.GetValue<bool?>($"Sonarr:Server:{nameof(ServerOptions.EnableSsl)}") ?? config.GetValue(nameof(ConfigFileProvider.EnableSsl), false);
             var sslCertPath = config.GetValue<string>($"Sonarr:Server:{nameof(ServerOptions.SslCertPath)}") ?? config.GetValue<string>(nameof(ConfigFileProvider.SslCertPath));
-            var sslKeyPath = config.GetValue<string>($"Sonarr:Server:{nameof(ServerOptions.SslKeyPath)}") ?? config.GetValue<string>(nameof(ConfigFileProvider.SslKeyPath));
             var sslCertPassword = config.GetValue<string>($"Sonarr:Server:{nameof(ServerOptions.SslCertPassword)}") ?? config.GetValue<string>(nameof(ConfigFileProvider.SslCertPassword));
             var logDbEnabled = config.GetValue<bool?>($"Sonarr:Log:{nameof(LogOptions.DbEnabled)}") ?? config.GetValue(nameof(ConfigFileProvider.LogDbEnabled), true);
 
@@ -192,7 +191,7 @@ namespace NzbDrone.Host
                         {
                             options.ConfigureHttpsDefaults(configureOptions =>
                             {
-                                configureOptions.ServerCertificate = ValidateSslCertificate(sslCertPath, sslKeyPath, sslCertPassword);
+                                configureOptions.ServerCertificate = ValidateSslCertificate(sslCertPath, sslCertPassword);
                             });
                         }
                     });
@@ -272,12 +271,13 @@ namespace NzbDrone.Host
             return $"{scheme}://{bindAddress}:{port}";
         }
 
-        private static X509Certificate2 ValidateSslCertificate(string cert, string key, string password)
+        private static X509Certificate2 ValidateSslCertificate(string cert, string password)
         {
             X509Certificate2 certificate;
+
             try
             {
-                certificate = X509CertificateLoader.LoadCertificateFromFile(cert);
+                certificate = new X509Certificate2(cert, password, X509KeyStorageFlags.DefaultKeySet);
             }
             catch (CryptographicException ex)
             {
@@ -287,10 +287,6 @@ namespace NzbDrone.Host
                         $"The SSL certificate file {cert} does not exist");
                 }
 
-                throw new SonarrStartupException(ex);
-            }
-            catch (Exception ex)
-            {
                 throw new SonarrStartupException(ex);
             }
 
