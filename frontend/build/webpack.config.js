@@ -265,7 +265,7 @@ module.exports = (env) => {
       minimizer: [
         new TerserPlugin({
           terserOptions: {
-            sourceMap: true, // Must be set to true if using source-maps in production
+            sourceMap: false, // Must be set to true if using source-maps in production
             mangle: false,
             keep_classnames: true,
             keep_fnames: true
