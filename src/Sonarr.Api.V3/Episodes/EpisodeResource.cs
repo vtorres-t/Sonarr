@@ -7,7 +7,6 @@ using NzbDrone.Core.Tv;
 using Sonarr.Api.V3.EpisodeFiles;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Api.V3.Episodes
 {
@@ -38,7 +37,6 @@ namespace Sonarr.Api.V3.Episodes
 
         // Hiding this so people don't think its usable (only used to set the initial state)
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        [SwaggerIgnore]
         public bool Grabbed { get; set; }
     }
 

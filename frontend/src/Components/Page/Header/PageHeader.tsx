@@ -6,7 +6,6 @@ import Link from 'Components/Link/Link';
 import useKeyboardShortcuts from 'Helpers/Hooks/useKeyboardShortcuts';
 import { icons } from 'Helpers/Props';
 import { setIsSidebarVisible } from 'Store/Actions/appActions';
-import translate from 'Utilities/String/translate';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import PageHeaderActionsMenu from './PageHeaderActionsMenu';
 import SeriesSearchInput from './SeriesSearchInput';
@@ -68,15 +67,6 @@ function PageHeader() {
       <SeriesSearchInput />
 
       <div className={styles.right}>
-        <IconButton
-          className={styles.donate}
-          name={icons.HEART}
-          aria-label={translate('Donate')}
-          to="https://sonarr.tv/donate.html"
-          size={14}
-          title={translate('Donate')}
-        />
-
         <PageHeaderActionsMenu
           onKeyboardShortcutsPress={handleOpenKeyboardShortcutsModal}
         />

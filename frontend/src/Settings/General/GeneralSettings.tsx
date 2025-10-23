@@ -22,7 +22,6 @@ import createSettingsSectionSelector from 'Store/Selectors/createSettingsSection
 import useIsWindowsService from 'System/useIsWindowsService';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import AnalyticSettings from './AnalyticSettings';
 import BackupSettings from './BackupSettings';
 import HostSettings from './HostSettings';
 import LoggingSettings from './LoggingSettings';
@@ -156,7 +155,6 @@ function GeneralSettings() {
               enableSsl={settings.enableSsl}
               sslPort={settings.sslPort}
               sslCertPath={settings.sslCertPath}
-              sslKeyPath={settings.sslKeyPath}
               sslCertPassword={settings.sslCertPassword}
               launchBrowser={settings.launchBrowser}
               onInputChange={handleInputChange}
@@ -189,11 +187,6 @@ function GeneralSettings() {
             <LoggingSettings
               logLevel={settings.logLevel}
               logSizeLimit={settings.logSizeLimit}
-              onInputChange={handleInputChange}
-            />
-
-            <AnalyticSettings
-              analyticsEnabled={settings.analyticsEnabled}
               onInputChange={handleInputChange}
             />
 

@@ -46,6 +46,9 @@ namespace NzbDrone.Core.Parser.Model
         [JsonIgnore]
         public PendingReleaseReason? PendingReleaseReason { get; set; }
 
+        /// <summary>
+        /// Age (in days)
+        /// </summary>
         public int Age
         {
             get

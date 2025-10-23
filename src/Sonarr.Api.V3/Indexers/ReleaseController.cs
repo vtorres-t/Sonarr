@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -170,19 +171,22 @@ namespace Sonarr.Api.V3.Indexers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<List<ReleaseResource>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
+        public async Task<List<ReleaseResource>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber, int maxNumber = 100)
         {
             if (episodeId.HasValue)
             {
-                return await GetEpisodeReleases(episodeId.Value);
+                return (await GetEpisodeReleases(episodeId.Value))
+                    .OrderByDescending(o => o.CustomFormatScore).Take(maxNumber).ToList();
             }
 
             if (seriesId.HasValue && seasonNumber.HasValue)
             {
-                return await GetSeasonReleases(seriesId.Value, seasonNumber.Value);
+                return (await GetSeasonReleases(seriesId.Value, seasonNumber.Value))
+                    .OrderByDescending(o => o.CustomFormatScore).Take(maxNumber).ToList();
             }
 
-            return await GetRss();
+            return (await GetRss())
+                .OrderByDescending(o => o.CustomFormatScore).TakeLast(maxNumber).ToList();
         }
 
         private async Task<List<ReleaseResource>> GetEpisodeReleases(int episodeId)

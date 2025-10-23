@@ -60,15 +60,8 @@ namespace Sonarr.Api.V3.Config
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .IsValidPath()
-                .SetValidator(new FileExistsValidator(diskProvider))
-                .IsValidCertificate()
+                .SetValidator(fileExistsValidator)
                 .When(c => c.EnableSsl);
-
-            SharedValidator.RuleFor(c => c.SslKeyPath)
-                .NotEmpty()
-                .IsValidPath()
-                .SetValidator(new FileExistsValidator(diskProvider))
-                .When(c => c.SslKeyPath.IsNotNullOrWhiteSpace());
 
             SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);
 

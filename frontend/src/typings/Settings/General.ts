@@ -13,7 +13,6 @@ export default interface General {
   launchBrowser: boolean;
   authenticationMethod: string;
   authenticationRequired: string;
-  analyticsEnabled: boolean;
   username: string;
   password: string;
   passwordConfirmation: string;
@@ -23,7 +22,6 @@ export default interface General {
   branch: string;
   apiKey: string;
   sslCertPath: string;
-  sslKeyPath: string;
   sslCertPassword: string;
   urlBase: string;
   instanceName: string;

@@ -32,8 +32,8 @@ const columns: Column[] = [
   {
     name: 'protocol',
     label: () => translate('Source'),
-    isSortable: true,
-    isVisible: true,
+    isSortable: false,
+    isVisible: false,
   },
   {
     name: 'age',
