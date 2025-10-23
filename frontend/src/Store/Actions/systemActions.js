@@ -62,20 +62,6 @@ export const defaultState = {
     isPopulated: false,
     error: null,
     items: []
-  },
-
-  logFiles: {
-    isFetching: false,
-    isPopulated: false,
-    error: null,
-    items: []
-  },
-
-  updateLogFiles: {
-    isFetching: false,
-    isPopulated: false,
-    error: null,
-    items: []
   }
 };
 
@@ -94,11 +80,6 @@ export const RESTORE_BACKUP = 'system/backups/restoreBackup';
 export const CLEAR_RESTORE_BACKUP = 'system/backups/clearRestoreBackup';
 export const DELETE_BACKUP = 'system/backups/deleteBackup';
 
-export const FETCH_UPDATES = 'system/updates/fetchUpdates';
-
-export const FETCH_LOG_FILES = 'system/logFiles/fetchLogFiles';
-export const FETCH_UPDATE_LOG_FILES = 'system/updateLogFiles/fetchUpdateLogFiles';
-
 export const RESTART = 'system/restart';
 export const SHUTDOWN = 'system/shutdown';
 
@@ -116,11 +97,6 @@ export const fetchBackups = createThunk(FETCH_BACKUPS);
 export const restoreBackup = createThunk(RESTORE_BACKUP);
 export const clearRestoreBackup = createAction(CLEAR_RESTORE_BACKUP);
 export const deleteBackup = createThunk(DELETE_BACKUP);
-
-export const fetchUpdates = createThunk(FETCH_UPDATES);
-
-export const fetchLogFiles = createThunk(FETCH_LOG_FILES);
-export const fetchUpdateLogFiles = createThunk(FETCH_UPDATE_LOG_FILES);
 
 export const restart = createThunk(RESTART);
 export const shutdown = createThunk(SHUTDOWN);
@@ -199,10 +175,6 @@ export const actionHandlers = handleThunks({
   },
 
   [DELETE_BACKUP]: createRemoveItemHandler(backupsSection, '/system/backup'),
-
-  [FETCH_UPDATES]: createFetchHandler('system.updates', '/update'),
-  [FETCH_LOG_FILES]: createFetchHandler('system.logFiles', '/log/file'),
-  [FETCH_UPDATE_LOG_FILES]: createFetchHandler('system.updateLogFiles', '/log/file/update'),
 
   [RESTART]: function(getState, payload, dispatch) {
     const promise = createAjaxRequest({
