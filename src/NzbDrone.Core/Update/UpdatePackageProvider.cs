@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using NzbDrone.Common.Cloud;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Analytics;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Update
@@ -20,20 +18,18 @@ namespace NzbDrone.Core.Update
         private readonly IHttpClient _httpClient;
         private readonly IHttpRequestBuilderFactory _requestBuilder;
         private readonly IPlatformInfo _platformInfo;
-        private readonly IAnalyticsService _analyticsService;
         private readonly IMainDatabase _mainDatabase;
 
-        public UpdatePackageProvider(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, IAnalyticsService analyticsService, IPlatformInfo platformInfo, IMainDatabase mainDatabase)
+        public UpdatePackageProvider(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, IPlatformInfo platformInfo, IMainDatabase mainDatabase)
         {
             _platformInfo = platformInfo;
-            _analyticsService = analyticsService;
             _requestBuilder = requestBuilder.Services;
             _httpClient = httpClient;
             _mainDatabase = mainDatabase;
         }
 
         public UpdatePackage GetLatestUpdate(string branch, Version currentVersion)
-        {
+        {/*
             var request = _requestBuilder.Create()
                                          .Resource("/update/{branch}")
                                          .AddQueryParam("version", currentVersion)
@@ -45,12 +41,6 @@ namespace NzbDrone.Core.Update
                                          .AddQueryParam("includeMajorVersion", true)
                                          .SetSegment("branch", branch);
 
-            if (_analyticsService.IsEnabled)
-            {
-                // Send if the system is active so we know which versions to deprecate/ignore
-                request.AddQueryParam("active", _analyticsService.InstallIsActive.ToString().ToLower());
-            }
-
             var update = _httpClient.Get<UpdatePackageAvailable>(request.Build()).Resource;
 
             if (!update.Available)
@@ -58,11 +48,13 @@ namespace NzbDrone.Core.Update
                 return null;
             }
 
-            return update.UpdatePackage;
+            return update.UpdatePackage;*/
+            return null;
         }
 
         public List<UpdatePackage> GetRecentUpdates(string branch, Version currentVersion, Version previousVersion)
         {
+            /*
             var request = _requestBuilder.Create()
                                          .Resource("/update/{branch}/changes")
                                          .AddQueryParam("version", currentVersion)
@@ -77,15 +69,11 @@ namespace NzbDrone.Core.Update
                 request.AddQueryParam("prevVersion", previousVersion);
             }
 
-            if (_analyticsService.IsEnabled)
-            {
-                // Send if the system is active so we know which versions to deprecate/ignore
-                request.AddQueryParam("active", _analyticsService.InstallIsActive.ToString().ToLower());
-            }
-
             var updates = _httpClient.Get<List<UpdatePackage>>(request.Build());
 
-            return updates.Resource;
+            return updates.Resource;*/
+
+            return new List<UpdatePackage>();
         }
     }
 }

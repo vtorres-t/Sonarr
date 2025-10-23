@@ -1,9 +1,6 @@
 using System;
-using System.Linq;
-using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 
@@ -22,6 +19,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Mocker.GetMock<IPlatformInfo>().SetupGet(c => c.Version).Returns(new Version("9.9.9"));
         }
 
+        /*
         [Test]
         public void no_update_when_version_higher()
         {
@@ -56,6 +54,6 @@ namespace NzbDrone.Core.Test.UpdateTests
             recent.Should().OnlyContain(c => c.ReleaseDate.Year >= 2014);
             recent.Where(c => c.Changes != null).Should().OnlyContain(c => c.Changes.New != null);
             recent.Where(c => c.Changes != null).Should().OnlyContain(c => c.Changes.Fixed != null);
-        }
+        }*/
     }
 }
