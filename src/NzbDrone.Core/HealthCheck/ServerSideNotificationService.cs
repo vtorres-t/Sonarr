@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using NLog;
 using NzbDrone.Common.Cloud;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 
@@ -30,6 +24,7 @@ namespace NzbDrone.Core.HealthCheck
 
         public override HealthCheck Check()
         {
+            /*
             var request = _cloudRequestBuilder.Services.Create()
                 .Resource("/notification")
                 .AddQueryParam("version", BuildInfo.Version)
@@ -56,6 +51,8 @@ namespace NzbDrone.Core.HealthCheck
 
                 return new HealthCheck(GetType());
             }
+            */
+            return new HealthCheck(GetType());
         }
     }
 
