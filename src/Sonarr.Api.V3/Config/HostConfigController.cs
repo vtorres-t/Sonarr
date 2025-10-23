@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
@@ -26,7 +25,7 @@ namespace Sonarr.Api.V3.Config
         public HostConfigController(IConfigFileProvider configFileProvider,
                                     IConfigService configService,
                                     IUserService userService,
-                                    IDiskProvider diskProvider)
+                                    FileExistsValidator fileExistsValidator)
         {
             _configFileProvider = configFileProvider;
             _configService = configService;
