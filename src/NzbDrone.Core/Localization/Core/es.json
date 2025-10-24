@@ -1880,7 +1880,6 @@
   "UiLanguage": "Idioma de interfaz",
   "UiLanguageHelpText": "Idioma que {appName} usará en la interfaz",
   "UiSettingsSummary": "Opciones de calendario, fecha y color alterado",
-  "UpdateAutomaticallyHelpText": "Descarga e instala actualizaciones automáticamente. Podrás seguir instalándolas desde Sistema: Actualizaciones",
   "TotalRecords": "Total de registros: {totalRecords}",
   "WantMoreControlAddACustomFormat": "¿Quieres más control sobre qué descargas son preferidas? Añade un [formato personalizado](/opciones/formatospersonalizados)",
   "OrganizeModalHeader": "Organizar y renombrar",

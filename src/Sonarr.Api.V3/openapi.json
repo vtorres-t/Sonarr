@@ -7585,28 +7585,6 @@
         }
       }
     },
-    "/api/v3/update": {
-      "get": {
-        "tags": [
-          "Update"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UpdateResource"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v3/log/file/update": {
       "get": {
         "tags": [
@@ -9023,10 +9001,6 @@
             "format": "int32"
           },
           "consoleLogLevel": {
-            "type": "string",
-            "nullable": true
-          },
-          "branch": {
             "type": "string",
             "nullable": true
           },
@@ -12360,87 +12334,6 @@
             "nullable": true
           },
           "relativePath": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateChanges": {
-        "type": "object",
-        "properties": {
-          "new": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "fixed": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateMechanism": {
-        "enum": [
-          "builtIn",
-          "script",
-          "external",
-          "apt",
-          "docker"
-        ],
-        "type": "string"
-      },
-      "UpdateResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "version": {
-            "type": "string",
-            "nullable": true
-          },
-          "branch": {
-            "type": "string",
-            "nullable": true
-          },
-          "releaseDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "fileName": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
-            "type": "string",
-            "nullable": true
-          },
-          "installed": {
-            "type": "boolean"
-          },
-          "installedOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "installable": {
-            "type": "boolean"
-          },
-          "latest": {
-            "type": "boolean"
-          },
-          "changes": {
-            "$ref": "#/components/schemas/UpdateChanges"
-          },
-          "hash": {
             "type": "string",
             "nullable": true
           }
