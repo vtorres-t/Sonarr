@@ -9054,16 +9054,6 @@
             "type": "string",
             "nullable": true
           },
-          "updateAutomatically": {
-            "type": "boolean"
-          },
-          "updateMechanism": {
-            "$ref": "#/components/schemas/UpdateMechanism"
-          },
-          "updateScriptPath": {
-            "type": "string",
-            "nullable": true
-          },
           "proxyEnabled": {
             "type": "boolean"
           },

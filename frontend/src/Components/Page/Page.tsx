@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppUpdatedModal from 'App/AppUpdatedModal';
 import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModal from 'App/ConnectionLostModal';
 import AppState from 'App/State/AppState';
@@ -99,11 +98,6 @@ function Page({ children }: PageProps) {
 
           {children}
         </div>
-
-        <AppUpdatedModal
-          isOpen={isUpdatedModalOpen}
-          onModalClose={handleUpdatedModalClose}
-        />
 
         <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
 
