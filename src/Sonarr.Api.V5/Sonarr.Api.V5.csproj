@@ -16,4 +16,7 @@
 		<ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
 		<ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Settings\" />
+	</ItemGroup>
 </Project>
