@@ -24,7 +24,6 @@ function Page({ children }: PageProps) {
   const dispatch = useDispatch();
   const { hasError, errors, isPopulated, isLocalStorageSupported } =
     useAppPage();
-  const [isUpdatedModalOpen, setIsUpdatedModalOpen] = useState(false);
   const [isConnectionLostModalOpen, setIsConnectionLostModalOpen] =
     useState(false);
 
@@ -32,13 +31,9 @@ function Page({ children }: PageProps) {
   const { isSmallScreen } = useSelector(createDimensionsSelector());
   const { authentication } = useSelector(createSystemStatusSelector());
   const authenticationEnabled = authentication !== 'none';
-  const { isSidebarVisible, isUpdated, isDisconnected, version } = useSelector(
+  const { isSidebarVisible, isDisconnected, version } = useSelector(
     (state: AppState) => state.app
   );
-
-  const handleUpdatedModalClose = useCallback(() => {
-    setIsUpdatedModalOpen(false);
-  }, []);
 
   const handleResize = useCallback(() => {
     dispatch(
@@ -62,12 +57,6 @@ function Page({ children }: PageProps) {
       setIsConnectionLostModalOpen(true);
     }
   }, [isDisconnected]);
-
-  useEffect(() => {
-    if (isUpdated) {
-      setIsUpdatedModalOpen(true);
-    }
-  }, [isUpdated]);
 
   if (hasError || !isLocalStorageSupported) {
     return (

@@ -11,7 +11,6 @@ namespace NzbDrone.Core.Configuration
         string PackageVersion { get; }
         string PackageAuthor { get; }
         string PackageGlobalMessage { get; }
-        string PackageBranch { get; }
         string ReleaseVersion { get; }
     }
 
@@ -22,8 +21,6 @@ namespace NzbDrone.Core.Configuration
             var bin = appFolderInfo.StartUpFolder;
             var packageInfoPath = Path.Combine(bin, "..", "package_info");
             var releaseInfoPath = Path.Combine(bin, "release_info");
-
-            DefaultBranch = "main";
 
             if (Path.GetFileName(bin) == "bin" && diskProvider.FileExists(packageInfoPath))
             {
@@ -70,10 +67,6 @@ namespace NzbDrone.Core.Configuration
         public string PackageVersion { get; private set; }
         public string PackageAuthor { get; private set; }
         public string PackageGlobalMessage { get; private set; }
-        public string PackageBranch { get; private set; }
-        public string PackageUpdateMechanismMessage { get; private set; }
         public string ReleaseVersion { get; private set; }
-        public string ReleaseBranch { get; set; }
-        public string DefaultBranch { get; private set; }
     }
 }

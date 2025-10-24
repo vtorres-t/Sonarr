@@ -12090,10 +12090,6 @@
           "mode": {
             "$ref": "#/components/schemas/RuntimeMode"
           },
-          "branch": {
-            "type": "string",
-            "nullable": true
-          },
           "authentication": {
             "$ref": "#/components/schemas/AuthenticationType"
           },
@@ -12126,13 +12122,6 @@
             "nullable": true
           },
           "packageAuthor": {
-            "type": "string",
-            "nullable": true
-          },
-          "packageUpdateMechanism": {
-            "$ref": "#/components/schemas/UpdateMechanism"
-          },
-          "packageUpdateMechanismMessage": {
             "type": "string",
             "nullable": true
           },

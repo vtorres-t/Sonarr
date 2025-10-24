@@ -87,7 +87,6 @@ namespace NzbDrone.Core.Configuration
                                   IOptions<AuthOptions> authOptions,
                                   IOptions<AppOptions> appOptions,
                                   IOptions<ServerOptions> serverOptions,
-                                  IOptions<UpdateOptions> updateOptions,
                                   IOptions<LogOptions> logOptions)
         {
             _cache = cacheManager.GetCache<string>(GetType());
