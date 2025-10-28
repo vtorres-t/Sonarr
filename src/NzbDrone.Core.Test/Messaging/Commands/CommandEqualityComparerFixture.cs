@@ -11,7 +11,6 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Update.Commands;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Messaging.Commands
@@ -99,7 +98,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
         [Test]
         public void should_return_false_when_commands_are_diffrent_types()
         {
-            CommandEqualityComparer.Instance.Equals(new RssSyncCommand(), new ApplicationUpdateCommand()).Should().BeFalse();
+            CommandEqualityComparer.Instance.Equals(new RssSyncCommand(), new EpisodeSearchCommand()).Should().BeFalse();
         }
 
         [Test]

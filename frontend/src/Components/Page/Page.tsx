@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppUpdatedModal from 'App/AppUpdatedModal';
 import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModal from 'App/ConnectionLostModal';
 import AppState from 'App/State/AppState';
@@ -25,7 +24,6 @@ function Page({ children }: PageProps) {
   const dispatch = useDispatch();
   const { hasError, errors, isPopulated, isLocalStorageSupported } =
     useAppPage();
-  const [isUpdatedModalOpen, setIsUpdatedModalOpen] = useState(false);
   const [isConnectionLostModalOpen, setIsConnectionLostModalOpen] =
     useState(false);
 
@@ -33,13 +31,9 @@ function Page({ children }: PageProps) {
   const { isSmallScreen } = useSelector(createDimensionsSelector());
   const { authentication } = useSelector(createSystemStatusSelector());
   const authenticationEnabled = authentication !== 'none';
-  const { isSidebarVisible, isUpdated, isDisconnected, version } = useSelector(
+  const { isSidebarVisible, isDisconnected, version } = useSelector(
     (state: AppState) => state.app
   );
-
-  const handleUpdatedModalClose = useCallback(() => {
-    setIsUpdatedModalOpen(false);
-  }, []);
 
   const handleResize = useCallback(() => {
     dispatch(
@@ -63,12 +57,6 @@ function Page({ children }: PageProps) {
       setIsConnectionLostModalOpen(true);
     }
   }, [isDisconnected]);
-
-  useEffect(() => {
-    if (isUpdated) {
-      setIsUpdatedModalOpen(true);
-    }
-  }, [isUpdated]);
 
   if (hasError || !isLocalStorageSupported) {
     return (
@@ -99,11 +87,6 @@ function Page({ children }: PageProps) {
 
           {children}
         </div>
-
-        <AppUpdatedModal
-          isOpen={isUpdatedModalOpen}
-          onModalClose={handleUpdatedModalClose}
-        />
 
         <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
 
