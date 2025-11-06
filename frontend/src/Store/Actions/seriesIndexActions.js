@@ -17,8 +17,8 @@ export const section = 'seriesIndex';
 // State
 
 export const defaultState = {
-  sortKey: 'sortTitle',
-  sortDirection: sortDirections.ASCENDING,
+  sortKey: 'sizeOnDisk',
+  sortDirection: sortDirections.DESCENDING,
   secondarySortKey: 'sortTitle',
   secondarySortDirection: sortDirections.ASCENDING,
   view: 'posters',
@@ -26,31 +26,31 @@ export const defaultState = {
   posterOptions: {
     detailedProgressBar: false,
     size: 'large',
-    showTitle: false,
-    showMonitored: true,
-    showQualityProfile: true,
-    showTags: false,
-    showSearchAction: false
+    showTitle: true,
+    showMonitored: false,
+    showQualityProfile: false,
+    showTags: true,
+    showSearchAction: true
   },
 
   overviewOptions: {
-    detailedProgressBar: false,
+    detailedProgressBar: true,
     size: 'medium',
     showMonitored: true,
     showNetwork: true,
-    showQualityProfile: true,
+    showQualityProfile: false,
     showPreviousAiring: false,
     showAdded: false,
     showSeasonCount: true,
     showPath: false,
-    showSizeOnDisk: false,
-    showTags: false,
-    showSearchAction: false
+    showSizeOnDisk: true,
+    showTags: true,
+    showSearchAction: true
   },
 
   tableOptions: {
     showBanners: false,
-    showSearchAction: false
+    showSearchAction: true
   },
 
   columns: [
@@ -78,13 +78,13 @@ export const defaultState = {
       name: 'network',
       label: () => translate('Network'),
       isSortable: true,
-      isVisible: true
+      isVisible: false
     },
     {
       name: 'qualityProfileId',
       label: () => translate('QualityProfile'),
       isSortable: true,
-      isVisible: true
+      isVisible: false
     },
     {
       name: 'nextAiring',
@@ -111,12 +111,6 @@ export const defaultState = {
       isVisible: false
     },
     {
-      name: 'seasonCount',
-      label: () => translate('Seasons'),
-      isSortable: true,
-      isVisible: true
-    },
-    {
       name: 'seasonFolder',
       label: () => translate('SeasonFolder'),
       isSortable: true,
@@ -125,6 +119,12 @@ export const defaultState = {
     {
       name: 'episodeProgress',
       label: () => translate('Episodes'),
+      isSortable: true,
+      isVisible: true
+    },
+    {
+      name: 'seasonCount',
+      label: () => translate('Seasons'),
       isSortable: true,
       isVisible: true
     },
@@ -168,17 +168,17 @@ export const defaultState = {
       name: 'ratings',
       label: () => translate('Rating'),
       isSortable: true,
-      isVisible: false
-    },
-    {
-      name: 'certification',
-      label: () => translate('Certification'),
-      isSortable: false,
-      isVisible: false
+      isVisible: true
     },
     {
       name: 'releaseGroups',
       label: () => translate('ReleaseGroups'),
+      isSortable: false,
+      isVisible: true
+    },
+    {
+      name: 'certification',
+      label: () => translate('Certification'),
       isSortable: false,
       isVisible: false
     },

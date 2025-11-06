@@ -2,7 +2,6 @@ interface SystemStatus {
   appData: string;
   appName: string;
   authentication: string;
-  branch: string;
   buildTime: string;
   databaseVersion: string;
   databaseType: string;
@@ -21,8 +20,6 @@ interface SystemStatus {
   osName: string;
   osVersion: string;
   packageAuthor: string;
-  packageUpdateMechanism: string;
-  packageUpdateMechanismMessage: string;
   packageVersion: string;
   runtimeName: string;
   runtimeVersion: string;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
@@ -9,6 +10,8 @@ namespace NzbDrone.Core.Parser.Model
 {
     public class ParsedEpisodeInfo
     {
+        public const string AIR_DATE_FORMAT = "yyyy-MM-dd";
+
         public string ReleaseTitle { get; set; }
         public string SeriesTitle { get; set; }
         public SeriesTitleInfo SeriesTitleInfo { get; set; }
@@ -18,6 +21,18 @@ namespace NzbDrone.Core.Parser.Model
         public int[] AbsoluteEpisodeNumbers { get; set; }
         public decimal[] SpecialAbsoluteEpisodeNumbers { get; set; }
         public string AirDate { get; set; }
+        public DateTime? AirDateDT
+        {
+            get
+            {
+                return IsDaily ? DateTime.ParseExact(AirDate, AIR_DATE_FORMAT, CultureInfo.InvariantCulture) : null;
+            }
+
+            private set
+            {
+            }
+        }
+
         public List<Language> Languages { get; set; }
         public bool FullSeason { get; set; }
         public bool IsPartialSeason { get; set; }

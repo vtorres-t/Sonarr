@@ -17,7 +17,6 @@ import ImportListSettings from 'Settings/ImportLists/ImportListSettings';
 import IndexerSettings from 'Settings/Indexers/IndexerSettings';
 import MediaManagement from 'Settings/MediaManagement/MediaManagement';
 import MetadataSettings from 'Settings/Metadata/MetadataSettings';
-import MetadataSourceSettings from 'Settings/MetadataSource/MetadataSourceSettings';
 import NotificationSettings from 'Settings/Notifications/NotificationSettings';
 import Profiles from 'Settings/Profiles/Profiles';
 import Quality from 'Settings/Quality/Quality';
@@ -29,7 +28,6 @@ import LogsTable from 'System/Events/LogsTable';
 import Logs from 'System/Logs/Logs';
 import Status from 'System/Status/Status';
 import Tasks from 'System/Tasks/Tasks';
-import Updates from 'System/Updates/Updates';
 import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
 import CutoffUnmet from 'Wanted/CutoffUnmet/CutoffUnmet';
 import Missing from 'Wanted/Missing/Missing';
@@ -122,11 +120,6 @@ function AppRoutes() {
 
       <Route path="/settings/metadata" component={MetadataSettings} />
 
-      <Route
-        path="/settings/metadatasource"
-        component={MetadataSourceSettings}
-      />
-
       <Route path="/settings/tags" component={TagSettings} />
 
       <Route path="/settings/general" component={GeneralSettings} />
@@ -142,8 +135,6 @@ function AppRoutes() {
       <Route path="/system/tasks" component={Tasks} />
 
       <Route path="/system/backup" component={Backups} />
-
-      <Route path="/system/updates" component={Updates} />
 
       <Route path="/system/events" component={LogsTable} />
 

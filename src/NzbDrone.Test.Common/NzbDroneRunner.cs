@@ -55,7 +55,7 @@ namespace NzbDrone.Test.Common
 
             if (BuildInfo.IsDebug)
             {
-                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "_output", "net8.0", consoleExe));
+                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "_output", "net9.0", consoleExe));
             }
             else
             {
@@ -177,7 +177,6 @@ namespace NzbDrone.Test.Common
                 new XElement(ConfigFileProvider.CONFIG_ELEMENT_NAME,
                              new XElement(nameof(ConfigFileProvider.ApiKey), apiKey),
                              new XElement(nameof(ConfigFileProvider.LogLevel), "trace"),
-                             new XElement(nameof(ConfigFileProvider.AnalyticsEnabled), false),
                              new XElement(nameof(ConfigFileProvider.AuthenticationMethod), enableAuth ? "Forms" : "None"),
                              new XElement(nameof(ConfigFileProvider.AuthenticationRequired), "DisabledForLocalAddresses"),
                              new XElement(nameof(ConfigFileProvider.Port), Port)));
