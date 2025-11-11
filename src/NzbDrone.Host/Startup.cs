@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using DryIoc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -138,7 +139,6 @@ namespace NzbDrone.Host
                               Lazy<ILogDatabase> logDatabaseFactory,
                               DatabaseTarget dbTarget,
                               ISingleInstancePolicy singleInstancePolicy,
-                              InitializeLogger initializeLogger,
                               ReconfigureLogging reconfigureLogging,
                               IAppFolderFactory appFolderFactory,
                               IProvidePidFile pidFileProvider,
@@ -148,7 +148,6 @@ namespace NzbDrone.Host
                               IEventAggregator eventAggregator,
                               SonarrErrorPipeline errorHandler)
         {
-            initializeLogger.Initialize();
             appFolderFactory.Register();
             pidFileProvider.Write();
 
