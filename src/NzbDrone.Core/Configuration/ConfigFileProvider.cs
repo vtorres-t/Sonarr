@@ -18,7 +18,6 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -36,25 +35,18 @@ namespace NzbDrone.Core.Configuration
         bool LaunchBrowser { get; }
         AuthenticationType AuthenticationMethod { get; }
         AuthenticationRequiredType AuthenticationRequired { get; }
-        bool AnalyticsEnabled { get; }
         string LogLevel { get; }
         string ConsoleLogLevel { get; }
         ConsoleLogFormat ConsoleLogFormat { get; }
         bool LogSql { get; }
         int LogRotate { get; }
         int LogSizeLimit { get; }
-        bool FilterSentryEvents { get; }
-        string Branch { get; }
         string ApiKey { get; }
         string SslCertPath { get; }
-        string SslKeyPath { get; }
         string SslCertPassword { get; }
         string UrlBase { get; }
         string UiFolder { get; }
         string InstanceName { get; }
-        bool UpdateAutomatically { get; }
-        UpdateMechanism UpdateMechanism { get; }
-        string UpdateScriptPath { get; }
         string SyslogServer { get; }
         int SyslogPort { get; }
         string SyslogLevel { get; }
@@ -80,7 +72,6 @@ namespace NzbDrone.Core.Configuration
         private readonly AuthOptions _authOptions;
         private readonly AppOptions _appOptions;
         private readonly ServerOptions _serverOptions;
-        private readonly UpdateOptions _updateOptions;
         private readonly LogOptions _logOptions;
 
         private readonly string _configFile;
@@ -96,7 +87,6 @@ namespace NzbDrone.Core.Configuration
                                   IOptions<AuthOptions> authOptions,
                                   IOptions<AppOptions> appOptions,
                                   IOptions<ServerOptions> serverOptions,
-                                  IOptions<UpdateOptions> updateOptions,
                                   IOptions<LogOptions> logOptions)
         {
             _cache = cacheManager.GetCache<string>(GetType());
@@ -107,7 +97,6 @@ namespace NzbDrone.Core.Configuration
             _authOptions = authOptions.Value;
             _appOptions = appOptions.Value;
             _serverOptions = serverOptions.Value;
-            _updateOptions = updateOptions.Value;
             _logOptions = logOptions.Value;
         }
 
@@ -232,10 +221,6 @@ namespace NzbDrone.Core.Configuration
                 ? enumValue
                 : GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
 
-        public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
-
-        public string Branch => _updateOptions.Branch ?? GetValue("Branch", "main").ToLowerInvariant();
-
         public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "debug").ToLowerInvariant();
         public string ConsoleLogLevel => _logOptions.ConsoleLevel ?? GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
@@ -256,9 +241,7 @@ namespace NzbDrone.Core.Configuration
         public bool LogSql => _logOptions.Sql ?? GetValueBoolean("LogSql", false, persist: false);
         public int LogRotate => _logOptions.Rotate ?? GetValueInt("LogRotate", 50, persist: false);
         public int LogSizeLimit => Math.Min(Math.Max(_logOptions.SizeLimit ?? GetValueInt("LogSizeLimit", 1, persist: false), 0), 10);
-        public bool FilterSentryEvents => _logOptions.FilterSentryEvents ?? GetValueBoolean("FilterSentryEvents", true, persist: false);
         public string SslCertPath => _serverOptions.SslCertPath ?? GetValue("SslCertPath", "");
-        public string SslKeyPath => _serverOptions.SslKeyPath ?? GetValue("SslKeyPath", "");
         public string SslCertPassword => _serverOptions.SslCertPassword ?? GetValue("SslCertPassword", "");
 
         public string UrlBase
@@ -292,15 +275,6 @@ namespace NzbDrone.Core.Configuration
                 return BuildInfo.AppName;
             }
         }
-
-        public bool UpdateAutomatically => _updateOptions.Automatically ?? GetValueBoolean("UpdateAutomatically", OsInfo.IsWindows, false);
-
-        public UpdateMechanism UpdateMechanism =>
-            Enum.TryParse<UpdateMechanism>(_updateOptions.Mechanism, out var enumValue)
-                ? enumValue
-                : GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false);
-
-        public string UpdateScriptPath => _updateOptions.ScriptPath ?? GetValue("UpdateScriptPath", "", false);
 
         public string SyslogServer => _logOptions.SyslogServer ?? GetValue("SyslogServer", "", persist: false);
 

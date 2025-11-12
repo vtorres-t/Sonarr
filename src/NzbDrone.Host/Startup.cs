@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using DryIoc;
 using Microsoft.AspNetCore.Authorization;
@@ -9,14 +8,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
@@ -35,7 +31,7 @@ using Sonarr.Http.ClientSchema;
 using Sonarr.Http.ErrorManagement;
 using Sonarr.Http.Frontend;
 using Sonarr.Http.Middleware;
-using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
+using IPNetwork = System.Net.IPNetwork;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace NzbDrone.Host
@@ -64,11 +60,11 @@ namespace NzbDrone.Host
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("fc00::"), 7));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("fe80::"), 10));
+                options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+                options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+                options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
+                options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("fc00::"), 7));
+                options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse("fe80::"), 10));
             });
 
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -105,118 +101,6 @@ namespace NzbDrone.Host
                 STJson.ApplySerializerSettings(options.JsonSerializerOptions);
             })
             .AddControllersAsServices();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v3", new OpenApiInfo
-                {
-                    Version = "3.0.0",
-                    Title = "Sonarr",
-                    Description = "Sonarr API docs - The v3 API docs apply to both v3 and v4 versions of Sonarr. Some functionality may only be available in v4 of the Sonarr application.",
-                    License = new OpenApiLicense
-                    {
-                        Name = "GPL-3.0",
-                        Url = new Uri("https://github.com/Sonarr/Sonarr/blob/develop/LICENSE")
-                    }
-                });
-
-                c.SwaggerDoc("v5", new OpenApiInfo
-                {
-                    Version = "5.0.0",
-                    Title = "Sonarr",
-                    Description = "Sonarr API docs - The v5 API docs apply to Sonarr v5 only.",
-                    License = new OpenApiLicense
-                    {
-                        Name = "GPL-3.0",
-                        Url = new Uri("https://github.com/Sonarr/Sonarr/blob/develop/LICENSE")
-                    }
-                });
-
-                var apiKeyHeader = new OpenApiSecurityScheme
-                {
-                    Name = "X-Api-Key",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "apiKey",
-                    Description = "Apikey passed as header",
-                    In = ParameterLocation.Header,
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "X-Api-Key"
-                    },
-                };
-
-                c.AddSecurityDefinition("X-Api-Key", apiKeyHeader);
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { apiKeyHeader, Array.Empty<string>() }
-                });
-
-                var apikeyQuery = new OpenApiSecurityScheme
-                {
-                    Name = "apikey",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "apiKey",
-                    Description = "Apikey passed as query parameter",
-                    In = ParameterLocation.Query,
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "apikey"
-                    },
-                };
-
-                c.AddServer(new OpenApiServer
-                {
-                    Url = "{protocol}://{hostpath}",
-                    Variables = new Dictionary<string, OpenApiServerVariable>
-                    {
-                        { "protocol", new OpenApiServerVariable { Default = "http", Enum = new List<string> { "http", "https" } } },
-                        { "hostpath", new OpenApiServerVariable { Default = "localhost:8989" } }
-                    }
-                });
-
-                c.AddSecurityDefinition("apikey", apikeyQuery);
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { apikeyQuery, Array.Empty<string>() }
-                });
-
-                c.DescribeAllParametersInCamelCase();
-
-                // Generate docs based on the controller's API version
-                c.DocInclusionPredicate((docName, apiDesc) =>
-                {
-                    Type type = null;
-
-                    if (apiDesc.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
-                    {
-                        type = controllerActionDescriptor.ControllerTypeInfo;
-                    }
-
-                    if (type == null)
-                    {
-                        return false;
-                    }
-
-                    var versions = new List<int>();
-
-                    versions.AddRange(type
-                        .GetCustomAttributes(true)
-                        .OfType<VersionedApiControllerAttribute>()
-                        .Select(attr => attr.Version));
-
-                    versions.AddRange(type
-                        .GetCustomAttributes(true)
-                        .OfType<VersionedFeedControllerAttribute>()
-                        .Select(attr => attr.Version));
-
-                    // Return anything with no version or a matching version
-                    return !versions.Any() || versions.Any(v => $"v{v}" == docName);
-                });
-            });
 
             services
             .AddSignalR()
@@ -255,7 +139,6 @@ namespace NzbDrone.Host
                               Lazy<ILogDatabase> logDatabaseFactory,
                               DatabaseTarget dbTarget,
                               ISingleInstancePolicy singleInstancePolicy,
-                              InitializeLogger initializeLogger,
                               ReconfigureLogging reconfigureLogging,
                               IAppFolderFactory appFolderFactory,
                               IProvidePidFile pidFileProvider,
@@ -265,7 +148,6 @@ namespace NzbDrone.Host
                               IEventAggregator eventAggregator,
                               SonarrErrorPipeline errorHandler)
         {
-            initializeLogger.Initialize();
             appFolderFactory.Register();
             pidFileProvider.Write();
 
@@ -322,15 +204,6 @@ namespace NzbDrone.Host
             app.UseMiddleware<BufferingMiddleware>(new List<string> { "/api/v3/command", "/api/v5/command" });
 
             app.UseWebSockets();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            if (BuildInfo.IsDebug)
-            {
-                app.UseSwagger(c =>
-                {
-                    c.RouteTemplate = "docs/{documentName}/openapi.json";
-                });
-            }
 
             app.UseEndpoints(x =>
             {

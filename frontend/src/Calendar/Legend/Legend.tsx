@@ -39,7 +39,7 @@ function Legend() {
       <LegendIconItem
         name={translate('SeriesFinale')}
         icon={icons.FINALE_SERIES}
-        kind={kinds.DANGER}
+        kind={kinds.WARNING}
         fullColorEvents={fullColorEvents}
         tooltip={translate('CalendarLegendSeriesFinaleTooltip')}
       />

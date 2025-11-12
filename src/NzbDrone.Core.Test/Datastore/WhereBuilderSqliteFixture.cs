@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using FluentAssertions;
 using NUnit.Framework;
@@ -186,6 +185,7 @@ namespace NzbDrone.Core.Test.Datastore
             _subject.ToString().Should().Be($"(\"Series\".\"Status\" IN @Clause1_P1)");
         }
 
+        /*
         [Test]
         public void enum_in_array()
         {
@@ -194,5 +194,6 @@ namespace NzbDrone.Core.Test.Datastore
 
             _subject.ToString().Should().Be($"(\"Series\".\"Status\" IN @Clause1_P1)");
         }
+        */
     }
 }

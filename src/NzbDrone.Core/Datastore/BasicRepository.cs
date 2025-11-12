@@ -210,9 +210,7 @@ namespace NzbDrone.Core.Datastore
         private TModel Insert(IDbConnection connection, IDbTransaction transaction, TModel model)
         {
             SqlBuilderExtensions.LogQuery(_insertSql, model);
-
             var multi = RetryStrategy.Execute(static (state, _) => state.connection.QueryMultiple(state._insertSql, state.model, state.transaction), (connection, _insertSql, model, transaction));
-
             var multiRead = multi.Read();
             var id = (int)(multiRead.First().id ?? multiRead.First().Id);
             _keyProperty.SetValue(model, id);

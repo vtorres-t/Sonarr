@@ -5,7 +5,6 @@ import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
-import MetadataAttribution from 'Components/MetadataAttribution';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import { Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
@@ -164,8 +163,6 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
           </div>
 
           <div className={styles.overview}>{overview}</div>
-
-          <MetadataAttribution />
         </div>
       </div>
 

@@ -43,15 +43,15 @@ export const firstDayOfWeekOptions: EnhancedSelectInputValue<number>[] = [
 ];
 
 export const weekColumnOptions: EnhancedSelectInputValue<string>[] = [
+  { key: 'ddd DD/MM', value: 'Tue 25/03', hint: 'ddd DD/MM' },
   { key: 'ddd M/D', value: 'Tue 3/25', hint: 'ddd M/D' },
   { key: 'ddd MM/DD', value: 'Tue 03/25', hint: 'ddd MM/DD' },
   { key: 'ddd D/M', value: 'Tue 25/3', hint: 'ddd D/M' },
-  { key: 'ddd DD/MM', value: 'Tue 25/03', hint: 'ddd DD/MM' },
 ];
 
 const shortDateFormatOptions: EnhancedSelectInputValue<string>[] = [
-  { key: 'MMM D YYYY', value: 'Mar 25 2014', hint: 'MMM D YYYY' },
   { key: 'DD MMM YYYY', value: '25 Mar 2014', hint: 'DD MMM YYYY' },
+  { key: 'MMM D YYYY', value: 'Mar 25 2014', hint: 'MMM D YYYY' },
   { key: 'MM/D/YYYY', value: '03/25/2014', hint: 'MM/D/YYYY' },
   { key: 'MM/DD/YYYY', value: '03/25/2014', hint: 'MM/DD/YYYY' },
   { key: 'DD/MM/YYYY', value: '25/03/2014', hint: 'DD/MM/YYYY' },
@@ -59,13 +59,13 @@ const shortDateFormatOptions: EnhancedSelectInputValue<string>[] = [
 ];
 
 const longDateFormatOptions: EnhancedSelectInputValue<string>[] = [
-  { key: 'dddd, MMMM D YYYY', value: 'Tuesday, March 25, 2014' },
   { key: 'dddd, D MMMM YYYY', value: 'Tuesday, 25 March, 2014' },
+  { key: 'dddd, MMMM D YYYY', value: 'Tuesday, March 25, 2014' },
 ];
 
 export const timeFormatOptions: EnhancedSelectInputValue<string>[] = [
-  { key: 'h(:mm)a', value: '5pm/5:30pm' },
   { key: 'HH:mm', value: '17:00/17:30' },
+  { key: 'h(:mm)a', value: '5pm/5:30pm' },
 ];
 
 function UISettings() {

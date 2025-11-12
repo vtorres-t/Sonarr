@@ -7,7 +7,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
@@ -61,19 +60,9 @@ namespace Sonarr.Api.V3.Config
                 .NotEmpty()
                 .IsValidPath()
                 .SetValidator(new FileExistsValidator(diskProvider))
-                .IsValidCertificate()
                 .When(c => c.EnableSsl);
 
-            SharedValidator.RuleFor(c => c.SslKeyPath)
-                .NotEmpty()
-                .IsValidPath()
-                .SetValidator(new FileExistsValidator(diskProvider))
-                .When(c => c.SslKeyPath.IsNotNullOrWhiteSpace());
-
             SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);
-
-            SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'main' is the default");
-            SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
 
             SharedValidator.RuleFor(c => c.BackupFolder).IsValidPath().When(c => Path.IsPathRooted(c.BackupFolder));
             SharedValidator.RuleFor(c => c.BackupInterval).InclusiveBetween(1, 7);

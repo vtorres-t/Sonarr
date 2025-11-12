@@ -1,10 +1,3 @@
-export type UpdateMechanism =
-  | 'builtIn'
-  | 'script'
-  | 'external'
-  | 'apt'
-  | 'docker';
-
 export default interface General {
   bindAddress: string;
   port: number;
@@ -13,24 +6,18 @@ export default interface General {
   launchBrowser: boolean;
   authenticationMethod: string;
   authenticationRequired: string;
-  analyticsEnabled: boolean;
   username: string;
   password: string;
   passwordConfirmation: string;
   logLevel: string;
   logSizeLimit: number;
   consoleLogLevel: string;
-  branch: string;
   apiKey: string;
   sslCertPath: string;
-  sslKeyPath: string;
   sslCertPassword: string;
   urlBase: string;
   instanceName: string;
   applicationUrl: string;
-  updateAutomatically: boolean;
-  updateMechanism: UpdateMechanism;
-  updateScriptPath: string;
   proxyEnabled: boolean;
   proxyType: string;
   proxyHostname: string;

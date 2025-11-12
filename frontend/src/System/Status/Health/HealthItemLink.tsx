@@ -49,14 +49,6 @@ function HealthItemLink(props: HealthItemLinkProps) {
           to="/serieseditor"
         />
       );
-    case 'UpdateCheck':
-      return (
-        <IconButton
-          name={icons.UPDATE}
-          title={translate('Updates')}
-          to="/system/updates"
-        />
-      );
     default:
       return null;
   }

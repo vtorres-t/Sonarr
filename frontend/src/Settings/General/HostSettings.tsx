@@ -19,7 +19,6 @@ interface HostSettingsProps {
   applicationUrl: PendingSection<General>['applicationUrl'];
   enableSsl: PendingSection<General>['enableSsl'];
   sslPort: PendingSection<General>['sslPort'];
-  sslKeyPath: PendingSection<General>['sslKeyPath'];
   sslCertPath: PendingSection<General>['sslCertPath'];
   sslCertPassword: PendingSection<General>['sslCertPassword'];
   launchBrowser: PendingSection<General>['launchBrowser'];
@@ -35,7 +34,6 @@ function HostSettings({
   enableSsl,
   sslPort,
   sslCertPath,
-  sslKeyPath,
   sslCertPassword,
   launchBrowser,
   onInputChange,
@@ -144,46 +142,33 @@ function HostSettings({
       ) : null}
 
       {enableSsl.value ? (
-        <>
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('SslCertPath')}</FormLabel>
+        <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormLabel>{translate('SslCertPath')}</FormLabel>
 
-            <FormInputGroup
-              type={inputTypes.TEXT}
-              name="sslCertPath"
-              helpText={translate('SslCertPathHelpText')}
-              helpTextWarning={translate('RestartRequiredHelpTextWarning')}
-              onChange={onInputChange}
-              {...sslCertPath}
-            />
-          </FormGroup>
+          <FormInputGroup
+            type={inputTypes.TEXT}
+            name="sslCertPath"
+            helpText={translate('SslCertPathHelpText')}
+            helpTextWarning={translate('RestartRequiredHelpTextWarning')}
+            onChange={onInputChange}
+            {...sslCertPath}
+          />
+        </FormGroup>
+      ) : null}
 
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('SslKeyPath')}</FormLabel>
+      {enableSsl.value ? (
+        <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+          <FormLabel>{translate('SslCertPassword')}</FormLabel>
 
-            <FormInputGroup
-              type={inputTypes.TEXT}
-              name="sslKeyPath"
-              helpText={translate('SslKeyPathHelpText')}
-              helpTextWarning={translate('RestartRequiredHelpTextWarning')}
-              onChange={onInputChange}
-              {...sslKeyPath}
-            />
-          </FormGroup>
-
-          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
-            <FormLabel>{translate('SslCertPassword')}</FormLabel>
-
-            <FormInputGroup
-              type={inputTypes.PASSWORD}
-              name="sslCertPassword"
-              helpText={translate('SslCertPasswordHelpText')}
-              helpTextWarning={translate('RestartRequiredHelpTextWarning')}
-              onChange={onInputChange}
-              {...sslCertPassword}
-            />
-          </FormGroup>
-        </>
+          <FormInputGroup
+            type={inputTypes.PASSWORD}
+            name="sslCertPassword"
+            helpText={translate('SslCertPasswordHelpText')}
+            helpTextWarning={translate('RestartRequiredHelpTextWarning')}
+            onChange={onInputChange}
+            {...sslCertPassword}
+          />
+        </FormGroup>
       ) : null}
 
       {isWindowsService ? null : (

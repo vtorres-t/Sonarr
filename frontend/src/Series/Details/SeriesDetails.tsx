@@ -11,7 +11,6 @@ import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import MetadataAttribution from 'Components/MetadataAttribution';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -796,8 +795,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <div className={styles.overview}>{overview}</div>
-
-                <MetadataAttribution />
               </div>
             </div>
           </div>

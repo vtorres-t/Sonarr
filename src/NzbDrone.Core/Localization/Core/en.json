@@ -79,8 +79,6 @@
   "AnEpisodeIsDownloading": "An Episode is downloading",
   "AnalyseVideoFiles": "Analyse video files",
   "AnalyseVideoFilesHelpText": "Extract video information such as resolution, runtime and codec information from files. This requires {appName} to read parts of the file which may cause high disk or network activity during scans.",
-  "Analytics": "Analytics",
-  "AnalyticsEnabledHelpText": "Send anonymous usage and error information to {appName}'s servers. This includes information on your browser, which {appName} WebUI pages you use, error reporting as well as OS and runtime version. We will use this information to prioritize features and bug fixes.",
   "Anime": "Anime",
   "AnimeEpisodeFormat": "Anime Episode Format",
   "AnimeEpisodeTypeDescription": "Episodes released using an absolute episode number",
@@ -2134,7 +2132,6 @@
   "UpcomingSeriesDescription": "Series has been announced but no exact air date yet",
   "UpdateAll": "Update All",
   "UpdateAppDirectlyLoadError": "Unable to update {appName} directly,",
-  "UpdateAutomaticallyHelpText": "Automatically download and install updates. You will still be able to install from System: Updates",
   "UpdateAvailableHealthCheckMessage": "New update is available: {version}",
   "UpdateFiltered": "Update Filtered",
   "UpdateMechanismHelpText": "Use {appName}'s built-in updater or a script",
@@ -2202,5 +2199,6 @@
   "Yes": "Yes",
   "YesCancel": "Yes, Cancel",
   "Yesterday": "Yesterday",
-  "YesterdayAt": "Yesterday at {time}"
+  "YesterdayAt": "Yesterday at {time}",
+  "Recent":  "Recent"
 }

@@ -6,7 +6,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Localization
 {
@@ -30,15 +29,13 @@ namespace NzbDrone.Core.Test.Localization
         }
 
         [Test]
-        public void should_get_string_in_french()
+        public void should_get_string_in_spanish()
         {
-            Mocker.GetMock<IConfigService>().Setup(m => m.UILanguage).Returns((int)Language.French);
+            Mocker.GetMock<IConfigService>().Setup(m => m.UILanguage).Returns((int)Language.Spanish);
 
             var localizedString = Subject.GetLocalizedString("UiLanguage");
 
-            localizedString.Should().Be("Langue de l'interface utilisateur");
-
-            ExceptionVerification.ExpectedErrors(1);
+            localizedString.Should().Be("Idioma de interfaz");
         }
 
         [Test]

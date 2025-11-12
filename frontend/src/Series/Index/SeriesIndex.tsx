@@ -24,6 +24,7 @@ import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptions
 import withScrollPosition from 'Components/withScrollPosition';
 import { align, icons, kinds } from 'Helpers/Props';
 import { DESCENDING } from 'Helpers/Props/sortDirections';
+import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import ParseToolbarButton from 'Parse/ParseToolbarButton';
 import NoSeries from 'Series/NoSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
@@ -101,6 +102,17 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
     undefined
   );
   const [isSelectMode, setIsSelectMode] = useState(false);
+
+  const [isInteractiveImportModalOpen, setIsInteractiveImportModalOpen] =
+    useState(false);
+
+  const handleInteractiveImportPress = useCallback(() => {
+    setIsInteractiveImportModalOpen(true);
+  }, []);
+
+  const handleInteractiveImportModalClose = useCallback(() => {
+    setIsInteractiveImportModalOpen(false);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchSeries());
@@ -256,6 +268,11 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
 
               <PageToolbarSeparator />
               <ParseToolbarButton />
+              <PageToolbarButton
+                label={translate('ManualImport')}
+                iconName={icons.INTERACTIVE}
+                onPress={handleInteractiveImportPress}
+              />
             </PageToolbarSection>
 
             <PageToolbarSection
@@ -366,6 +383,10 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
               onModalClose={onOptionsModalClose}
             />
           ) : null}
+          <InteractiveImportModal
+            isOpen={isInteractiveImportModalOpen}
+            onModalClose={handleInteractiveImportModalClose}
+          />
         </PageContent>
       </SelectProvider>
     </QueueDetailsProvider>
