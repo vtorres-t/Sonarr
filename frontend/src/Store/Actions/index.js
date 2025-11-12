@@ -1,5 +1,4 @@
 import * as app from './appActions';
-import * as calendar from './calendarActions';
 import * as captcha from './captchaActions';
 import * as commands from './commandActions';
 import * as customFilters from './customFilterActions';
@@ -11,7 +10,6 @@ import * as importSeries from './importSeriesActions';
 import * as interactiveImportActions from './interactiveImportActions';
 import * as oAuth from './oAuthActions';
 import * as organizePreview from './organizePreviewActions';
-import * as parse from './parseActions';
 import * as paths from './pathActions';
 import * as providerOptions from './providerOptionActions';
 import * as releases from './releaseActions';
@@ -20,13 +18,11 @@ import * as series from './seriesActions';
 import * as seriesHistory from './seriesHistoryActions';
 import * as seriesIndex from './seriesIndexActions';
 import * as settings from './settingsActions';
-import * as system from './systemActions';
 import * as tags from './tagActions';
 import * as wanted from './wantedActions';
 
 export default [
   app,
-  calendar,
   captcha,
   commands,
   customFilters,
@@ -38,7 +34,6 @@ export default [
   interactiveImportActions,
   oAuth,
   organizePreview,
-  parse,
   paths,
   providerOptions,
   releases,
@@ -47,7 +42,6 @@ export default [
   seriesHistory,
   seriesIndex,
   settings,
-  system,
   tags,
   wanted
 ];

@@ -3,7 +3,6 @@ import { FilterBuilderTypes } from 'Helpers/Props/filterBuilderTypes';
 import { DateFilterValue, FilterType } from 'Helpers/Props/filterTypes';
 import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
-import CalendarAppState from './CalendarAppState';
 import CaptchaAppState from './CaptchaAppState';
 import CommandAppState from './CommandAppState';
 import CustomFiltersAppState from './CustomFiltersAppState';
@@ -15,14 +14,12 @@ import InteractiveImportAppState from './InteractiveImportAppState';
 import MessagesAppState from './MessagesAppState';
 import OAuthAppState from './OAuthAppState';
 import OrganizePreviewAppState from './OrganizePreviewAppState';
-import ParseAppState from './ParseAppState';
 import PathsAppState from './PathsAppState';
 import ProviderOptionsAppState from './ProviderOptionsAppState';
 import ReleasesAppState from './ReleasesAppState';
 import RootFolderAppState from './RootFolderAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
-import SystemAppState from './SystemAppState';
 import TagsAppState from './TagsAppState';
 import WantedAppState from './WantedAppState';
 
@@ -82,7 +79,6 @@ export interface AppSectionState {
 interface AppState {
   app: AppSectionState;
   blocklist: BlocklistAppState;
-  calendar: CalendarAppState;
   captcha: CaptchaAppState;
   commands: CommandAppState;
   customFilters: CustomFiltersAppState;
@@ -94,7 +90,6 @@ interface AppState {
   interactiveImport: InteractiveImportAppState;
   oAuth: OAuthAppState;
   organizePreview: OrganizePreviewAppState;
-  parse: ParseAppState;
   paths: PathsAppState;
   providerOptions: ProviderOptionsAppState;
   releases: ReleasesAppState;
@@ -103,7 +98,6 @@ interface AppState {
   seriesHistory: SeriesHistoryAppState;
   seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
-  system: SystemAppState;
   tags: TagsAppState;
   wanted: WantedAppState;
 }
