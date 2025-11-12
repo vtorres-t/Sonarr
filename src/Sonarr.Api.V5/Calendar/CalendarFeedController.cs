@@ -74,12 +74,12 @@ public class CalendarFeedController : Controller
 
             if (asAllDay)
             {
-                occurrence.Start = new CalDateTime(episode.AirDateUtc!.Value.ToLocalTime()) { HasTime = false };
+                occurrence.Start = episode.AirDateUtc.HasValue ? new CalDateTime(episode.AirDateUtc.Value.ToLocalTime(), false) : null;
             }
             else
             {
-                occurrence.Start = new CalDateTime(episode.AirDateUtc!.Value) { HasTime = true };
-                occurrence.End = new CalDateTime(episode.AirDateUtc.Value.AddMinutes(series.Runtime)) { HasTime = true };
+                occurrence.Start = episode.AirDateUtc.HasValue ? new CalDateTime(episode.AirDateUtc.Value, true) : null;
+                occurrence.End = episode.AirDateUtc.HasValue ? new CalDateTime(episode.AirDateUtc.Value.AddMinutes(series.Runtime), true) : null;
             }
 
             switch (series.SeriesType)
@@ -93,9 +93,9 @@ public class CalendarFeedController : Controller
             }
         }
 
-        var serializer = (IStringSerializer)new SerializerFactory().Build(calendar.GetType(), new SerializationContext());
-        var icalendar = serializer.SerializeToString(calendar);
+        var serializer = new SerializerFactory().Build(calendar?.GetType(), new SerializationContext());
+        var icalendar =  ((IStringSerializer)serializer.NullSafe()).SerializeToString(calendar);
 
-        return Content(icalendar, "text/calendar");
+        return Content(icalendar ?? "", "text/calendar");
     }
 }
