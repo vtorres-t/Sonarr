@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import AppState, { Filter } from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
@@ -17,10 +19,11 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import usePaging from 'Components/Table/usePaging';
+import Episode from 'Episode/Episode';
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { align, icons, kinds } from 'Helpers/Props';
 import { executeCommand } from 'Store/Actions/commandActions';
+import { fetchEpisodeFiles } from 'Store/Actions/episodeFileActions';
 import {
   batchToggleCutoffUnmetEpisodes,
   clearCutoffUnmet,
@@ -32,15 +35,14 @@ import {
 } from 'Store/Actions/wantedActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
-import { SelectStateInputProps } from 'typings/props';
 import { TableOptionsChangePayload } from 'typings/Table';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
+import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import {
   registerPagePopulator,
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import CutoffUnmetRow from './CutoffUnmetRow';
 
 function getMonitoredValue(
@@ -50,7 +52,7 @@ function getMonitoredValue(
   return !!getFilterValue(filters, selectedFilterKey, 'monitored', false);
 }
 
-function CutoffUnmet() {
+function CutoffUnmetContent() {
   const dispatch = useDispatch();
   const requestCurrentPage = useCurrentPage();
 
@@ -77,8 +79,14 @@ function CutoffUnmet() {
     createCommandExecutingSelector(commandNames.EPISODE_SEARCH)
   );
 
-  const [selectState, setSelectState] = useSelectState();
-  const { allSelected, allUnselected, selectedState } = selectState;
+  const {
+    allSelected,
+    allUnselected,
+    anySelected,
+    getSelectedIds,
+    selectAll,
+    unselectAll,
+  } = useSelect<Episode>();
 
   const [isConfirmSearchAllModalOpen, setIsConfirmSearchAllModalOpen] =
     useState(false);
@@ -95,50 +103,44 @@ function CutoffUnmet() {
     gotoPage: gotoCutoffUnmetPage,
   });
 
-  const selectedIds = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
-
   const isSaving = useMemo(() => {
     return items.filter((m) => m.isSaving).length > 1;
   }, [items]);
 
-  const itemsSelected = !!selectedIds.length;
   const isShowingMonitored = getMonitoredValue(filters, selectedFilterKey);
   const isSearchingForEpisodes =
     isSearchingForAllEpisodes || isSearchingForSelectedEpisodes;
 
+  const episodeIds = useMemo(() => {
+    return selectUniqueIds<Episode, number>(items, 'id');
+  }, [items]);
+
+  const episodeFileIds = useMemo(() => {
+    return selectUniqueIds<Episode, number>(items, 'episodeFileId');
+  }, [items]);
+
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [items, setSelectState]
-  );
-
-  const handleSelectedChange = useCallback(
-    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items,
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [items, setSelectState]
+    [selectAll, unselectAll]
   );
 
   const handleSearchSelectedPress = useCallback(() => {
     dispatch(
       executeCommand({
         name: commandNames.EPISODE_SEARCH,
-        episodeIds: selectedIds,
+        episodeIds: getSelectedIds(),
         commandFinished: () => {
           dispatch(fetchCutoffUnmet());
         },
       })
     );
-  }, [selectedIds, dispatch]);
+  }, [getSelectedIds, dispatch]);
 
   const handleSearchAllPress = useCallback(() => {
     setIsConfirmSearchAllModalOpen(true);
@@ -164,11 +166,11 @@ function CutoffUnmet() {
   const handleToggleSelectedPress = useCallback(() => {
     dispatch(
       batchToggleCutoffUnmetEpisodes({
-        episodeIds: selectedIds,
+        episodeIds: getSelectedIds(),
         monitored: !isShowingMonitored,
       })
     );
-  }, [isShowingMonitored, selectedIds, dispatch]);
+  }, [isShowingMonitored, getSelectedIds, dispatch]);
 
   const handleFilterSelect = useCallback(
     (filterKey: number | string) => {
@@ -223,137 +225,153 @@ function CutoffUnmet() {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    if (episodeFileIds.length) {
+      dispatch(fetchEpisodeFiles({ episodeFileIds }));
+    }
+  }, [episodeFileIds, dispatch]);
+
   return (
-    <PageContent title={translate('CutoffUnmet')}>
-      <PageToolbar>
-        <PageToolbarSection>
-          <PageToolbarButton
-            label={
-              itemsSelected
-                ? translate('SearchSelected')
-                : translate('SearchAll')
-            }
-            iconName={icons.SEARCH}
-            isDisabled={isSearchingForEpisodes}
-            isSpinning={isSearchingForEpisodes}
-            onPress={
-              itemsSelected ? handleSearchSelectedPress : handleSearchAllPress
-            }
-          />
-
-          <PageToolbarSeparator />
-
-          <PageToolbarButton
-            label={
-              isShowingMonitored
-                ? translate('UnmonitorSelected')
-                : translate('MonitorSelected')
-            }
-            iconName={icons.MONITORED}
-            isDisabled={!itemsSelected}
-            isSpinning={isSaving}
-            onPress={handleToggleSelectedPress}
-          />
-        </PageToolbarSection>
-
-        <PageToolbarSection alignContent={align.RIGHT}>
-          <TableOptionsModalWrapper
-            columns={columns}
-            pageSize={pageSize}
-            onTableOptionChange={handleTableOptionChange}
-          >
+    <QueueDetailsProvider episodeIds={episodeIds}>
+      <PageContent title={translate('CutoffUnmet')}>
+        <PageToolbar>
+          <PageToolbarSection>
             <PageToolbarButton
-              label={translate('Options')}
-              iconName={icons.TABLE}
+              label={
+                anySelected
+                  ? translate('SearchSelected')
+                  : translate('SearchAll')
+              }
+              iconName={icons.SEARCH}
+              isDisabled={isSearchingForEpisodes}
+              isSpinning={isSearchingForEpisodes}
+              onPress={
+                anySelected ? handleSearchSelectedPress : handleSearchAllPress
+              }
             />
-          </TableOptionsModalWrapper>
 
-          <FilterMenu
-            alignMenu={align.RIGHT}
-            selectedFilterKey={selectedFilterKey}
-            filters={filters}
-            customFilters={[]}
-            onFilterSelect={handleFilterSelect}
-          />
-        </PageToolbarSection>
-      </PageToolbar>
+            <PageToolbarSeparator />
 
-      <PageContentBody>
-        {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+            <PageToolbarButton
+              label={
+                isShowingMonitored
+                  ? translate('UnmonitorSelected')
+                  : translate('MonitorSelected')
+              }
+              iconName={icons.MONITORED}
+              isDisabled={!anySelected}
+              isSpinning={isSaving}
+              onPress={handleToggleSelectedPress}
+            />
+          </PageToolbarSection>
 
-        {!isFetching && error ? (
-          <Alert kind={kinds.DANGER}>{translate('CutoffUnmetLoadError')}</Alert>
-        ) : null}
-
-        {isPopulated && !error && !items.length ? (
-          <Alert kind={kinds.INFO}>{translate('CutoffUnmetNoItems')}</Alert>
-        ) : null}
-
-        {isPopulated && !error && !!items.length ? (
-          <div>
-            <Table
-              selectAll={true}
-              allSelected={allSelected}
-              allUnselected={allUnselected}
+          <PageToolbarSection alignContent={align.RIGHT}>
+            <TableOptionsModalWrapper
               columns={columns}
               pageSize={pageSize}
-              sortKey={sortKey}
-              sortDirection={sortDirection}
               onTableOptionChange={handleTableOptionChange}
-              onSelectAllChange={handleSelectAllChange}
-              onSortPress={handleSortPress}
             >
-              <TableBody>
-                {items.map((item) => {
-                  return (
-                    <CutoffUnmetRow
-                      key={item.id}
-                      isSelected={selectedState[item.id]}
-                      columns={columns}
-                      {...item}
-                      onSelectedChange={handleSelectedChange}
-                    />
-                  );
-                })}
-              </TableBody>
-            </Table>
+              <PageToolbarButton
+                label={translate('Options')}
+                iconName={icons.TABLE}
+              />
+            </TableOptionsModalWrapper>
 
-            <TablePager
-              page={page}
-              totalPages={totalPages}
-              totalRecords={totalRecords}
-              isFetching={isFetching}
-              onFirstPagePress={handleFirstPagePress}
-              onPreviousPagePress={handlePreviousPagePress}
-              onNextPagePress={handleNextPagePress}
-              onLastPagePress={handleLastPagePress}
-              onPageSelect={handlePageSelect}
+            <FilterMenu
+              alignMenu={align.RIGHT}
+              selectedFilterKey={selectedFilterKey}
+              filters={filters}
+              customFilters={[]}
+              onFilterSelect={handleFilterSelect}
             />
+          </PageToolbarSection>
+        </PageToolbar>
 
-            <ConfirmModal
-              isOpen={isConfirmSearchAllModalOpen}
-              kind={kinds.DANGER}
-              title={translate('SearchForCutoffUnmetEpisodes')}
-              message={
-                <div>
+        <PageContentBody>
+          {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+
+          {!isFetching && error ? (
+            <Alert kind={kinds.DANGER}>
+              {translate('CutoffUnmetLoadError')}
+            </Alert>
+          ) : null}
+
+          {isPopulated && !error && !items.length ? (
+            <Alert kind={kinds.INFO}>{translate('CutoffUnmetNoItems')}</Alert>
+          ) : null}
+
+          {isPopulated && !error && !!items.length ? (
+            <div>
+              <Table
+                selectAll={true}
+                allSelected={allSelected}
+                allUnselected={allUnselected}
+                columns={columns}
+                pageSize={pageSize}
+                sortKey={sortKey}
+                sortDirection={sortDirection}
+                onTableOptionChange={handleTableOptionChange}
+                onSelectAllChange={handleSelectAllChange}
+                onSortPress={handleSortPress}
+              >
+                <TableBody>
+                  {items.map((item) => {
+                    return (
+                      <CutoffUnmetRow
+                        key={item.id}
+                        columns={columns}
+                        {...item}
+                      />
+                    );
+                  })}
+                </TableBody>
+              </Table>
+
+              <TablePager
+                page={page}
+                totalPages={totalPages}
+                totalRecords={totalRecords}
+                isFetching={isFetching}
+                onFirstPagePress={handleFirstPagePress}
+                onPreviousPagePress={handlePreviousPagePress}
+                onNextPagePress={handleNextPagePress}
+                onLastPagePress={handleLastPagePress}
+                onPageSelect={handlePageSelect}
+              />
+
+              <ConfirmModal
+                isOpen={isConfirmSearchAllModalOpen}
+                kind={kinds.DANGER}
+                title={translate('SearchForCutoffUnmetEpisodes')}
+                message={
                   <div>
-                    {translate(
-                      'SearchForCutoffUnmetEpisodesConfirmationCount',
-                      { totalRecords }
-                    )}
+                    <div>
+                      {translate(
+                        'SearchForCutoffUnmetEpisodesConfirmationCount',
+                        { totalRecords }
+                      )}
+                    </div>
+                    <div>{translate('MassSearchCancelWarning')}</div>
                   </div>
-                  <div>{translate('MassSearchCancelWarning')}</div>
-                </div>
-              }
-              confirmLabel={translate('Search')}
-              onConfirm={handleSearchAllCutoffUnmetConfirmed}
-              onCancel={handleConfirmSearchAllCutoffUnmetModalClose}
-            />
-          </div>
-        ) : null}
-      </PageContentBody>
-    </PageContent>
+                }
+                confirmLabel={translate('Search')}
+                onConfirm={handleSearchAllCutoffUnmetConfirmed}
+                onCancel={handleConfirmSearchAllCutoffUnmetModalClose}
+              />
+            </div>
+          ) : null}
+        </PageContentBody>
+      </PageContent>
+    </QueueDetailsProvider>
   );
 }
 
-export default CutoffUnmet;
+export default function CutoffUnmet() {
+  const { items } = useSelector((state: AppState) => state.wanted.cutoffUnmet);
+
+  return (
+    <SelectProvider<Episode> items={items}>
+      <CutoffUnmetContent />
+    </SelectProvider>
+  );
+}
