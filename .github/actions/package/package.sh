@@ -3,7 +3,7 @@
 outputFolder=_output
 artifactsFolder=_artifacts
 uiFolder="$outputFolder/UI"
-framework="${FRAMEWORK:=net9.0}"
+framework="${FRAMEWORK:=net10.0}"
 
 rm -rf $artifactsFolder
 mkdir $artifactsFolder
