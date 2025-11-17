@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
@@ -45,7 +45,7 @@ namespace NzbDrone.Integration.Test.ApiTests
         private bool BeValidRelease(ReleaseResource releaseResource)
         {
             releaseResource.Guid.Should().NotBeNullOrEmpty();
-            releaseResource.Age.Should().BeGreaterOrEqualTo(-1);
+            releaseResource.Age.Should().BeGreaterThanOrEqualTo(-1);
             releaseResource.Title.Should().NotBeNullOrWhiteSpace();
             releaseResource.DownloadUrl.Should().NotBeNullOrWhiteSpace();
             releaseResource.SeriesTitle.Should().NotBeNullOrWhiteSpace();
