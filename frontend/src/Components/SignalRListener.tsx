@@ -3,11 +3,13 @@ import {
   HubConnectionBuilder,
   LogLevel,
 } from '@microsoft/signalr';
-import { useQueryClient } from '@tanstack/react-query';
+import { QueryKey, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import ModelBase from 'App/ModelBase';
 import Command from 'Commands/Command';
+import Episode from 'Episode/Episode';
+import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import { setAppValue, setVersion } from 'Store/Actions/appActions';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
 import {
@@ -18,7 +20,6 @@ import {
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import { fetchSeries } from 'Store/Actions/seriesActions';
 import { fetchQualityDefinitions } from 'Store/Actions/settingsActions';
-import { fetchTagDetails, fetchTags } from 'Store/Actions/tagActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
 import SignalRLogger from 'Utilities/SignalRLogger';
 
@@ -301,10 +302,12 @@ function SignalRListener() {
     }
 
     if (name === 'tag') {
-      if (body.action === 'sync') {
-        dispatch(fetchTags());
-        dispatch(fetchTagDetails());
+      if (version < 5 || body.action !== 'sync') {
+        return;
       }
+
+      queryClient.invalidateQueries({ queryKey: ['/tag'] });
+      queryClient.invalidateQueries({ queryKey: ['/tag/detail'] });
 
       return;
     }
@@ -315,29 +318,29 @@ function SignalRListener() {
     }
 
     if (name === 'wanted/cutoff') {
-      if (body.action === 'updated') {
-        dispatch(
-          updateItem({
-            section: 'wanted.cutoffUnmet',
-            updateOnly: true,
-            ...body.resource,
-          })
-        );
+      if (version < 5 || body.action !== 'updated') {
+        return;
       }
+
+      updatePagedItem<Episode>(
+        queryClient,
+        ['/wanted/cutoff'],
+        body.resource as Episode
+      );
 
       return;
     }
 
     if (name === 'wanted/missing') {
-      if (body.action === 'updated') {
-        dispatch(
-          updateItem({
-            section: 'wanted.missing',
-            updateOnly: true,
-            ...body.resource,
-          })
-        );
+      if (version < 5 || body.action !== 'updated') {
+        return;
       }
+
+      updatePagedItem<Episode>(
+        queryClient,
+        ['/wanted/missing'],
+        body.resource as Episode
+      );
 
       return;
     }
@@ -385,3 +388,37 @@ function SignalRListener() {
 }
 
 export default SignalRListener;
+
+const updatePagedItem = <T extends ModelBase>(
+  queryClient: ReturnType<typeof useQueryClient>,
+  queryKey: QueryKey,
+  updatedItem: T
+) => {
+  queryClient.setQueriesData(
+    { queryKey },
+    (oldData: PagedQueryResponse<T> | undefined) => {
+      if (!oldData) {
+        return oldData;
+      }
+
+      const itemIndex = oldData.records.findIndex(
+        (item) => item.id === updatedItem.id
+      );
+
+      if (itemIndex === -1) {
+        return oldData;
+      }
+
+      return {
+        ...oldData,
+        records: oldData.records.map((item) => {
+          if (item.id === updatedItem.id) {
+            return updatedItem;
+          }
+
+          return item;
+        }),
+      };
+    }
+  );
+};
