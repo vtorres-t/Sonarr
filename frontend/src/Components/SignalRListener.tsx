@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import ModelBase from 'App/ModelBase';
 import Command from 'Commands/Command';
 import Episode from 'Episode/Episode';
+import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import { setAppValue, setVersion } from 'Store/Actions/appActions';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
@@ -17,7 +18,6 @@ import {
   finishCommand,
   updateCommand,
 } from 'Store/Actions/commandActions';
-import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import { fetchSeries } from 'Store/Actions/seriesActions';
 import { fetchQualityDefinitions } from 'Store/Actions/settingsActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
@@ -164,15 +164,61 @@ function SignalRListener() {
     }
 
     if (name === 'episodefile') {
-      const section = 'episodeFiles';
+      if (version < 5) {
+        return;
+      }
 
       if (body.action === 'updated') {
-        dispatch(updateItem({ section, ...body.resource }));
+        const updatedItem = body.resource as EpisodeFile;
+
+        queryClient.setQueriesData(
+          { queryKey: ['/episodeFile'] },
+          (oldData: EpisodeFile[] | undefined) => {
+            if (!oldData) {
+              return oldData;
+            }
+
+            const itemIndex = oldData.findIndex(
+              (item) => item.id === updatedItem.id
+            );
+
+            // Add episode file to the end
+            if (itemIndex === -1) {
+              return [...oldData, updatedItem];
+            }
+
+            return oldData.map((item) => {
+              if (item.id === updatedItem.id) {
+                return updatedItem;
+              }
+
+              return item;
+            });
+          }
+        );
 
         // Repopulate the page to handle recently imported file
         repopulatePage('episodeFileUpdated');
       } else if (body.action === 'deleted') {
-        dispatch(removeItem({ section, id: body.resource.id }));
+        const id = body.resource.id;
+
+        queryClient.setQueriesData(
+          { queryKey: ['/episodeFile'] },
+          (oldData: EpisodeFile[] | undefined) => {
+            if (!oldData) {
+              return oldData;
+            }
+
+            const itemIndex = oldData.findIndex((item) => item.id === id);
+
+            // Add episode file to the end
+            if (itemIndex === -1) {
+              return oldData;
+            }
+
+            return oldData.filter((item) => item.id !== id);
+          }
+        );
 
         repopulatePage('episodeFileDeleted');
       }
@@ -275,7 +321,11 @@ function SignalRListener() {
     }
 
     if (name === 'rootfolder') {
-      dispatch(fetchRootFolders());
+      if (version < 5) {
+        return;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['/rootFolder'] });
 
       return;
     }
