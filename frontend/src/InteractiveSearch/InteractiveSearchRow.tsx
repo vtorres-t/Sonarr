@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
+//import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
