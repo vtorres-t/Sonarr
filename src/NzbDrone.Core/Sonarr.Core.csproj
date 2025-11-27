@@ -8,27 +8,22 @@
     <PackageReference Include="Equ" Version="2.3.0" />
     <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="10.0.0" />
-    <PackageReference Include="Polly" Version="8.6.4" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="142.0.7444.16200" />
+    <PackageReference Include="Polly" Version="8.6.5" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="142.0.7444.17500" />
     <PackageReference Include="Servarr.FFMpegCore" Version="4.7.0-26" />
     <PackageReference Include="Servarr.FFprobe" Version="5.1.4.112" />
-    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
 	<PackageReference Include="System.Drawing.Common" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.0" />
 	  <PackageReference Include="FluentMigrator.Runner.SQLite" Version="6.2.0" />
 	  <PackageReference Include="FluentMigrator.Runner.Postgres" Version="6.2.0" />
     <PackageReference Include="FluentValidation" Version="9.5.4" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="NLog.Targets.Syslog" Version="7.0.0" />
 	  <PackageReference Include="NLog.Extensions.Logging" Version="5.4.0" />
     <PackageReference Include="MonoTorrent" Version="3.0.2" />
-    <PackageReference Include="Npgsql" Version="9.0.4" />
-	  <PackageReference Include="IPAddressRange" Version="6.2.0" />
-    <PackageReference Remove="StyleCop.Analyzers" />
+    <PackageReference Include="Npgsql" Version="10.0.0" />
+	  <PackageReference Include="IPAddressRange" Version="6.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
