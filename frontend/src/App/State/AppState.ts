@@ -6,7 +6,6 @@ import BlocklistAppState from './BlocklistAppState';
 import CaptchaAppState from './CaptchaAppState';
 import CommandAppState from './CommandAppState';
 import CustomFiltersAppState from './CustomFiltersAppState';
-import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState, { SeriesHistoryAppState } from './HistoryAppState';
 import ImportSeriesAppState from './ImportSeriesAppState';
@@ -16,8 +15,6 @@ import OAuthAppState from './OAuthAppState';
 import OrganizePreviewAppState from './OrganizePreviewAppState';
 import PathsAppState from './PathsAppState';
 import ProviderOptionsAppState from './ProviderOptionsAppState';
-import ReleasesAppState from './ReleasesAppState';
-import RootFolderAppState from './RootFolderAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
 
@@ -34,6 +31,7 @@ export interface FilterBuilderProp<T> {
   optionsSelector?: (items: T[]) => FilterBuilderPropOption[];
 }
 
+// TODO: Make generic so key can be keyof T
 export interface PropertyFilter {
   key: string;
   value: string | string[] | number[] | boolean[] | DateFilterValue;
@@ -80,7 +78,6 @@ interface AppState {
   captcha: CaptchaAppState;
   commands: CommandAppState;
   customFilters: CustomFiltersAppState;
-  episodeFiles: EpisodeFilesAppState;
   episodeHistory: HistoryAppState;
   episodes: EpisodesAppState;
   episodesSelection: EpisodesAppState;
@@ -90,8 +87,6 @@ interface AppState {
   organizePreview: OrganizePreviewAppState;
   paths: PathsAppState;
   providerOptions: ProviderOptionsAppState;
-  releases: ReleasesAppState;
-  rootFolders: RootFolderAppState;
   series: SeriesAppState;
   seriesHistory: SeriesHistoryAppState;
   seriesIndex: SeriesIndexAppState;

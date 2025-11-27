@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 // import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
@@ -15,7 +15,6 @@ import EpisodeQuality from 'Episode/EpisodeQuality';
 import IndexerFlags from 'Episode/IndexerFlags';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
-import Release from 'typings/Release';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -25,6 +24,7 @@ import InteractiveSearchPayload from './InteractiveSearchPayload';
 import OverrideMatchModal from './OverrideMatch/OverrideMatchModal';
 import Peers from './Peers';
 import ReleaseSceneIndicator from './ReleaseSceneIndicator';
+import { Release, useGrabRelease } from './useReleases';
 import styles from './InteractiveSearchRow.css';
 
 function getDownloadIcon(
@@ -73,48 +73,54 @@ function getDownloadTooltip(
 
 interface InteractiveSearchRowProps extends Release {
   searchPayload: InteractiveSearchPayload;
-  onGrabPress(...args: unknown[]): void;
 }
 
 function InteractiveSearchRow(props: InteractiveSearchRowProps) {
   const {
-    guid,
-    indexerId,
-    protocol,
-    age,
-    ageHours,
-    ageMinutes,
+    decision,
+    history,
+    parsedInfo,
+    release,
     publishDate,
-    title,
-    infoUrl,
-    indexer,
-    size,
-    seeders,
-    leechers,
-    quality,
     languages,
     customFormatScore,
     customFormats,
     sceneMapping,
-    seasonNumber,
-    episodeNumbers,
-    absoluteEpisodeNumbers,
     mappedSeriesId,
     mappedSeasonNumber,
     mappedEpisodeNumbers,
     mappedAbsoluteEpisodeNumbers,
     mappedEpisodeInfo,
     indexerFlags = 0,
-    rejections = [],
     episodeRequested,
     downloadAllowed,
-    isDaily,
-    isGrabbing = false,
-    isGrabbed = false,
-    grabError,
     searchPayload,
-    onGrabPress,
   } = props;
+
+  const { rejections = [] } = decision;
+
+  const {
+    absoluteEpisodeNumbers,
+    episodeNumbers,
+    isDaily,
+    seasonNumber,
+    quality,
+  } = parsedInfo;
+
+  const {
+    guid,
+    indexerId,
+    age,
+    ageHours,
+    ageMinutes,
+    title,
+    infoUrl,
+    indexer,
+    size,
+    seeders,
+    leechers,
+    protocol,
+  } = release;
 
   const { longDateFormat, timeFormat, timeZone } = useSelector(
     createUISettingsSelector()
@@ -122,10 +128,17 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
   const [isConfirmGrabModalOpen, setIsConfirmGrabModalOpen] = useState(false);
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
+  const { isGrabbing, isGrabbed, grabError, grabRelease } = useGrabRelease();
 
-  const onGrabPressWrapper = useCallback(() => {
+  const isBlocklisted = useMemo(() => {
+    return (
+      decision.rejections.findIndex((r) => r.reason === 'blocklisted') >= 0
+    );
+  }, [decision]);
+
+  const handleGrabPress = useCallback(() => {
     if (downloadAllowed) {
-      onGrabPress({
+      grabRelease({
         guid,
         indexerId,
       });
@@ -138,19 +151,19 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     guid,
     indexerId,
     downloadAllowed,
-    onGrabPress,
+    grabRelease,
     setIsConfirmGrabModalOpen,
   ]);
 
   const onGrabConfirm = useCallback(() => {
     setIsConfirmGrabModalOpen(false);
 
-    onGrabPress({
+    grabRelease({
       guid,
       indexerId,
-      ...searchPayload,
+      searchInfo: searchPayload,
     });
-  }, [guid, indexerId, searchPayload, onGrabPress, setIsConfirmGrabModalOpen]);
+  }, [guid, indexerId, searchPayload, grabRelease, setIsConfirmGrabModalOpen]);
 
   const onGrabCancel = useCallback(() => {
     setIsConfirmGrabModalOpen(false);
@@ -198,6 +211,57 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         </div>
       </TableRowCell>
       <TableRowCell className={styles.indexer}>{indexer}</TableRowCell>
+
+      <TableRowCell className={styles.history}>
+        {history ? (
+          <Icon
+            name={icons.DOWNLOADING}
+            kind={history.failed ? kinds.DANGER : kinds.DEFAULT}
+            title={`${
+              history.failed
+                ? translate('FailedAt', {
+                    date: formatDateTime(
+                      history.failed,
+                      longDateFormat,
+                      timeFormat,
+                      { includeSeconds: true }
+                    ),
+                  })
+                : translate('GrabbedAt', {
+                    date: formatDateTime(
+                      history.grabbed,
+                      longDateFormat,
+                      timeFormat,
+                      { includeSeconds: true }
+                    ),
+                  })
+            }`}
+          />
+        ) : null}
+
+        {isBlocklisted ? (
+          <Icon
+            containerClassName={
+              history ? styles.blocklistIconContainer : undefined
+            }
+            name={icons.BLOCKLIST}
+            kind={kinds.DANGER}
+            title={
+              history?.failed
+                ? `${translate('BlockListedAt', {
+                    date: formatDateTime(
+                      history.failed,
+                      longDateFormat,
+                      timeFormat,
+                      { includeSeconds: true }
+                    ),
+                  })}`
+                : translate('Blocklisted')
+            }
+          />
+        ) : null}
+      </TableRowCell>
+
       <TableRowCell className={styles.size}>{formatBytes(size)}</TableRowCell>
       <TableRowCell className={styles.peers}>
         {protocol === 'torrent' ? (
@@ -238,7 +302,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
             body={
               <ul>
                 {rejections.map((rejection, index) => {
-                  return <li key={index}>{rejection}</li>;
+                  return <li key={index}>{rejection.message}</li>;
                 })}
               </ul>
             }
@@ -252,7 +316,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           kind={getDownloadKind(isGrabbed, grabError)}
           title={getDownloadTooltip(isGrabbing, isGrabbed, grabError)}
           isSpinning={isGrabbing}
-          onPress={onGrabPressWrapper}
+          onPress={handleGrabPress}
         />
 
         <Link
@@ -299,6 +363,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         protocol={protocol}
         isGrabbing={isGrabbing}
         grabError={grabError}
+        grabRelease={grabRelease}
         onModalClose={onOverrideModalClose}
       />
     </TableRow>
