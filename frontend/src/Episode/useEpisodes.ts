@@ -1,29 +1,89 @@
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import { useEffect, useMemo } from 'react';
+import useApiQuery from 'Helpers/Hooks/useApiQuery';
+import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import Episode from './Episode';
+import { useEpisodeOptions } from './episodeOptionsStore';
+import { setEpisodeQueryKey } from './useEpisode';
 
-function getEpisodes(episodeIds: number[], episodes: Episode[]) {
-  return episodeIds.reduce<Episode[]>((acc, id) => {
-    const episode = episodes.find((episode) => episode.id === id);
+const DEFAULT_EPISODES: Episode[] = [];
 
-    if (episode) {
-      acc.push(episode);
+interface SeriesEpisodes {
+  seriesId: number;
+}
+
+interface SeasonEpisodes {
+  seriesId: number | undefined;
+  seasonNumber: number | undefined;
+  isSelection: boolean;
+}
+
+interface EpisodeIds {
+  episodeIds: number[];
+}
+
+interface EpisodeFileId {
+  episodeFileId: number;
+}
+
+export type EpisodeFilter =
+  | SeriesEpisodes
+  | SeasonEpisodes
+  | EpisodeIds
+  | EpisodeFileId;
+
+const useEpisodes = (params: EpisodeFilter) => {
+  const setQueryKey = !('isSelection' in params);
+
+  const { isPlaceholderData, queryKey, ...result } = useApiQuery<Episode[]>({
+    path: '/episode',
+    queryParams:
+      'isSelection' in params
+        ? {
+            seriesId: params.seriesId,
+            seasonNumber: params.seasonNumber,
+          }
+        : { ...params },
+    queryOptions: {
+      enabled:
+        ('seriesId' in params && params.seriesId !== undefined) ||
+        ('episodeIds' in params && params.episodeIds?.length > 0) ||
+        ('episodeFileId' in params && params.episodeFileId !== undefined),
+    },
+  });
+
+  useEffect(() => {
+    if (setQueryKey && !isPlaceholderData) {
+      setEpisodeQueryKey('episodes', queryKey);
     }
+  }, [setQueryKey, isPlaceholderData, queryKey]);
 
-    return acc;
-  }, []);
-}
+  return {
+    ...result,
+    queryKey,
+    data: result.data ?? DEFAULT_EPISODES,
+  };
+};
 
-function createEpisodeSelector(episodeIds: number[]) {
-  return createSelector(
-    (state: AppState) => state.episodes.items,
-    (episodes) => {
-      return getEpisodes(episodeIds, episodes);
-    }
-  );
-}
+export default useEpisodes;
 
-export default function useEpisodes(episodeIds: number[]) {
-  return useSelector(createEpisodeSelector(episodeIds));
-}
+export const useSeasonEpisodes = (seriesId: number, seasonNumber: number) => {
+  const { data, ...result } = useEpisodes({ seriesId });
+  const { sortKey, sortDirection } = useEpisodeOptions();
+
+  const seasonEpisodes = useMemo(() => {
+    const { data: seasonEpisodes } = clientSideFilterAndSort(
+      data.filter((episode) => episode.seasonNumber === seasonNumber),
+      {
+        sortKey,
+        sortDirection,
+      }
+    );
+
+    return seasonEpisodes;
+  }, [data, seasonNumber, sortKey, sortDirection]);
+
+  return {
+    ...result,
+    data: seasonEpisodes,
+  };
+};
