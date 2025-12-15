@@ -1,15 +1,8 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
+import { useAppDimension } from 'App/appStore';
 import { SelectProvider } from 'App/Select/SelectContext';
-import ClientSideCollectionAppState from 'App/State/ClientSideCollectionAppState';
-import SeriesAppState, { SeriesIndexAppState } from 'App/State/SeriesAppState';
 import { RSS_SYNC } from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -28,18 +21,16 @@ import { DESCENDING } from 'Helpers/Props/sortDirections';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import ParseToolbarButton from 'Parse/ParseToolbarButton';
 import NoSeries from 'Series/NoSeries';
-import { executeCommand } from 'Store/Actions/commandActions';
-import { fetchSeries } from 'Store/Actions/seriesActions';
 import {
-  setSeriesFilter,
+  setSeriesOption,
   setSeriesSort,
-  setSeriesTableOption,
-  setSeriesView,
-} from 'Store/Actions/seriesIndexActions';
+  setSeriesTableOptions,
+  useSeriesOptions,
+} from 'Series/seriesOptionsStore';
+import { FILTERS, useSeriesIndex } from 'Series/useSeries';
+import { executeCommand } from 'Store/Actions/commandActions';
 import scrollPositions from 'Store/scrollPositions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
-import createSeriesClientSideCollectionItemsSelector from 'Store/Selectors/createSeriesClientSideCollectionItemsSelector';
 import translate from 'Utilities/String/translate';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
@@ -77,26 +68,23 @@ interface SeriesIndexProps {
 
 const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   const {
-    isFetching,
-    isPopulated,
-    error,
+    isLoading: isFetching,
+    isFetched,
+    isError: error,
+    data,
     totalItems,
-    items,
-    columns,
-    selectedFilterKey,
-    filters,
-    sortKey,
-    sortDirection,
-    view,
-  }: SeriesAppState & SeriesIndexAppState & ClientSideCollectionAppState =
-    useSelector(createSeriesClientSideCollectionItemsSelector('seriesIndex'));
+  } = useSeriesIndex();
+
+  const { selectedFilterKey, sortKey, sortDirection, view, columns } =
+    useSeriesOptions();
+  const filters = FILTERS;
 
   const customFilters = useCustomFiltersList('series');
 
   const isRssSyncExecuting = useSelector(
     createCommandExecutingSelector(RSS_SYNC)
   );
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
+  const isSmallScreen = useAppDimension('isSmallScreen');
   const dispatch = useDispatch();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
@@ -104,21 +92,6 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
     undefined
   );
   const [isSelectMode, setIsSelectMode] = useState(false);
-
-  const [isInteractiveImportModalOpen, setIsInteractiveImportModalOpen] =
-    useState(false);
-
-  const handleInteractiveImportPress = useCallback(() => {
-    setIsInteractiveImportModalOpen(true);
-  }, []);
-
-  const handleInteractiveImportModalClose = useCallback(() => {
-    setIsInteractiveImportModalOpen(false);
-  }, []);
-
-  useEffect(() => {
-    dispatch(fetchSeries());
-  }, [dispatch]);
 
   const onRssSyncPress = useCallback(() => {
     dispatch(
@@ -132,37 +105,33 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
     setIsSelectMode(!isSelectMode);
   }, [isSelectMode, setIsSelectMode]);
 
-  const onTableOptionChange = useCallback(
-    (payload: unknown) => {
-      dispatch(setSeriesTableOption(payload));
-    },
-    [dispatch]
-  );
+  const onTableOptionChange = useCallback((payload: unknown) => {
+    setSeriesTableOptions(
+      payload as Partial<{ showBanners: boolean; showSearchAction: boolean }>
+    );
+  }, []);
 
   const onViewSelect = useCallback(
     (value: string) => {
-      dispatch(setSeriesView({ view: value }));
+      setSeriesOption('view', value);
 
       if (scrollerRef.current) {
         scrollerRef.current.scrollTo(0, 0);
       }
     },
-    [scrollerRef, dispatch]
+    [scrollerRef]
   );
 
   const onSortSelect = useCallback(
     (value: string) => {
-      dispatch(setSeriesSort({ sortKey: value }));
+      setSeriesSort({ sortKey: value, sortDirection });
     },
-    [dispatch]
+    [sortDirection]
   );
 
-  const onFilterSelect = useCallback(
-    (value: string | number) => {
-      dispatch(setSeriesFilter({ selectedFilterKey: value }));
-    },
-    [dispatch]
-  );
+  const onFilterSelect = useCallback((value: string | number) => {
+    setSeriesOption('selectedFilterKey', value);
+  }, []);
 
   const onOptionsPress = useCallback(() => {
     setIsOptionsModalOpen(true);
@@ -196,7 +165,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
       };
     }
 
-    const characters = items.reduce((acc: Record<string, number>, item) => {
+    const characters = data.reduce((acc: Record<string, number>, item) => {
       let char = item.sortTitle.charAt(0);
 
       if (!isNaN(Number(char))) {
@@ -223,15 +192,15 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
       characters,
       order,
     };
-  }, [items, sortKey, sortDirection]);
+  }, [data, sortKey, sortDirection]);
   const ViewComponent = useMemo(() => getViewComponent(view), [view]);
 
-  const isLoaded = !!(!error && isPopulated && items.length);
+  const isLoaded = !!(!error && isFetched && data.length);
   const hasNoSeries = !totalItems;
 
   return (
     <QueueDetailsProvider all={true}>
-      <SelectProvider items={items}>
+      <SelectProvider items={data}>
         <PageContent>
           <PageToolbar>
             <PageToolbarSection>
@@ -335,7 +304,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
               initialScrollTop={props.initialScrollTop}
               onScroll={onScroll}
             >
-              {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+              {isFetching && !isFetched ? <LoadingIndicator /> : null}
 
               {!isFetching && !!error ? (
                 <Alert kind={kinds.DANGER}>
@@ -347,7 +316,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
                 <div className={styles.contentBodyContainer}>
                   <ViewComponent
                     scrollerRef={scrollerRef}
-                    items={items}
+                    items={data}
                     sortKey={sortKey}
                     sortDirection={sortDirection}
                     jumpToCharacter={jumpToCharacter}
@@ -359,7 +328,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
                 </div>
               ) : null}
 
-              {!error && isPopulated && !items.length ? (
+              {!error && isFetched && !data.length ? (
                 <NoSeries totalItems={totalItems} />
               ) : null}
             </PageContentBody>
