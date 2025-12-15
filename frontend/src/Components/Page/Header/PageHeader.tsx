@@ -4,7 +4,6 @@ import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import useKeyboardShortcuts from 'Helpers/Hooks/useKeyboardShortcuts';
 import { icons } from 'Helpers/Props';
-import translate from 'Utilities/String/translate';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import PageHeaderActionsMenu from './PageHeaderActionsMenu';
 import SeriesSearchInput from './SeriesSearchInput';
