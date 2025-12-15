@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { useAppDimension } from 'App/appStore';
 import * as commandNames from 'Commands/commandNames';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
@@ -32,10 +33,8 @@ import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
 import { Statistics } from 'Series/Series';
-import useSeries from 'Series/useSeries';
-import { toggleSeasonMonitored } from 'Store/Actions/seriesActions';
+import { useSingleSeries, useToggleSeasonMonitored } from 'Series/useSeries';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { TableOptionsChangePayload } from 'typings/Table';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import isAfter from 'Utilities/Date/isAfter';
@@ -103,7 +102,6 @@ interface SeriesDetailsSeasonProps {
   monitored: boolean;
   seasonNumber: number;
   statistics?: Statistics;
-  isSaving?: boolean;
   isExpanded?: boolean;
   onExpandPress: (seasonNumber: number, isExpanded: boolean) => void;
 }
@@ -113,17 +111,16 @@ function SeriesDetailsSeason({
   monitored,
   seasonNumber,
   statistics = {} as Statistics,
-  isSaving,
   isExpanded,
   onExpandPress,
 }: SeriesDetailsSeasonProps) {
   const dispatch = useDispatch();
-  const { monitored: seriesMonitored, path } = useSeries(seriesId)!;
+  const { monitored: seriesMonitored, path } = useSingleSeries(seriesId)!;
   const { data: items } = useSeasonEpisodes(seriesId, seasonNumber);
 
   const { columns, sortKey, sortDirection } = useEpisodeOptions();
 
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
+  const isSmallScreen = useAppDimension('isSmallScreen');
   const isSearching = useSelector(
     createIsSearchingSelector(seriesId, seasonNumber)
   );
@@ -149,6 +146,9 @@ function SeriesDetailsSeason({
   const { toggleEpisodesMonitored, isToggling, togglingEpisodeIds } =
     useToggleEpisodesMonitored(getQueryKey('episodes')!);
 
+  const { toggleSeasonMonitored, isTogglingSeasonMonitored } =
+    useToggleSeasonMonitored(seriesId);
+
   const lastToggledEpisode = useRef<number | null>(null);
   const hasSetInitalExpand = useRef(false);
 
@@ -159,15 +159,12 @@ function SeriesDetailsSeason({
 
   const handleMonitorSeasonPress = useCallback(
     (value: boolean) => {
-      dispatch(
-        toggleSeasonMonitored({
-          seriesId,
-          seasonNumber,
-          monitored: value,
-        })
-      );
+      toggleSeasonMonitored({
+        seasonNumber,
+        monitored: value,
+      });
     },
-    [seriesId, seasonNumber, dispatch]
+    [seasonNumber, toggleSeasonMonitored]
   );
 
   const handleExpandPress = useCallback(() => {
@@ -287,7 +284,7 @@ function SeriesDetailsSeason({
           <MonitorToggleButton
             monitored={monitored}
             isDisabled={!seriesMonitored}
-            isSaving={isSaving}
+            isSaving={isTogglingSeasonMonitored}
             size={24}
             onPress={handleMonitorSeasonPress}
           />
