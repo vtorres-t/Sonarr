@@ -49,7 +49,6 @@ import SeriesIndexRefreshSeriesButton from './SeriesIndexRefreshSeriesButton';
 import SeriesIndexTable from './Table/SeriesIndexTable';
 import SeriesIndexTableOptions from './Table/SeriesIndexTableOptions';
 import styles from './SeriesIndex.css';
-import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 
 function getViewComponent(view: string) {
   if (view === 'posters') {
