@@ -1,17 +1,14 @@
 import { keepPreviousData } from '@tanstack/react-query';
 import moment from 'moment';
 import { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { create } from 'zustand';
 import AppState from 'App/State/AppState';
-import Command from 'Commands/Command';
-import * as commandNames from 'Commands/commandNames';
 import { setEpisodeQueryKey } from 'Episode/useEpisode';
 import { Filter, FilterBuilderProp } from 'Filters/Filter';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { filterBuilderValueTypes } from 'Helpers/Props';
-import { executeCommandHelper } from 'Store/Actions/commandActions';
 import { CalendarItem } from 'typings/Calendar';
 import findSelectedFilters from 'Utilities/Filter/findSelectedFilters';
 import translate from 'Utilities/String/translate';
@@ -41,6 +38,12 @@ export const FILTER_BUILDER: FilterBuilderProp<CalendarItem>[] = [
   {
     name: 'unmonitored',
     label: () => translate('IncludeUnmonitored'),
+    type: 'equal',
+    valueType: filterBuilderValueTypes.BOOL,
+  },
+  {
+    name: 'includeSpecials',
+    label: () => translate('IncludeSpecials'),
     type: 'equal',
     valueType: filterBuilderValueTypes.BOOL,
   },
@@ -88,7 +91,7 @@ const useCalendar = () => {
     return getPopulatableRange(dates[0], dates[dates.length - 1], view);
   }, [dates, view]);
 
-  const { unmonitored, tags } = useMemo(() => {
+  const { includeUnmonitored, includeSpecials, tags } = useMemo(() => {
     const selectedFilters = findSelectedFilters(
       selectedFilterKey,
       FILTERS,
@@ -96,12 +99,17 @@ const useCalendar = () => {
     );
 
     return selectedFilters.reduce<{
-      unmonitored: boolean;
+      includeUnmonitored: boolean;
+      includeSpecials: boolean;
       tags?: number[] | undefined;
     }>(
       (acc, filter) => {
         if (filter.key === 'unmonitored' && Array.isArray(filter.value)) {
-          acc.unmonitored = (filter.value as boolean[]).includes(true);
+          acc.includeUnmonitored = (filter.value as boolean[]).includes(true);
+        }
+
+        if (filter.key === 'includeSpecials' && Array.isArray(filter.value)) {
+          acc.includeSpecials = (filter.value as boolean[]).includes(true);
         }
 
         if (filter.key === 'tags' && filter.type === 'contains') {
@@ -111,7 +119,8 @@ const useCalendar = () => {
         return acc;
       },
       {
-        unmonitored: false,
+        includeUnmonitored: false,
+        includeSpecials: true,
       }
     );
   }, [customFilters, selectedFilterKey]);
@@ -121,7 +130,8 @@ const useCalendar = () => {
     queryParams: {
       start,
       end,
-      unmonitored,
+      includeUnmonitored,
+      includeSpecials,
       tags,
     },
     queryOptions: {
@@ -180,19 +190,6 @@ export const useCalendarRange = () => {
 
 export const useCalendarSearchMissingCommandId = () => {
   return calendarStore((state) => state.searchMissingCommandId);
-};
-
-export const useSearchMissing = (episodeIds: number[]) => {
-  const dispatch = useDispatch();
-
-  const commandPayload = {
-    name: commandNames.EPISODE_SEARCH,
-    episodeIds,
-  };
-
-  executeCommandHelper(commandPayload, dispatch).then((data: Command) => {
-    calendarStore.setState({ searchMissingCommandId: data.id });
-  });
 };
 
 export const setCalendarDayCount = (dayCount: number) => {
