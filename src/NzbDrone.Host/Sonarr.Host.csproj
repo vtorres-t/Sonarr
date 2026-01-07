@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.5.4" />
 		<PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="6.2.0" />
 	</ItemGroup>
 	<ItemGroup>
