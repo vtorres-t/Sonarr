@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 // import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -14,7 +13,7 @@ import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import IndexerFlags from 'Episode/IndexerFlags';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -122,9 +121,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     protocol,
   } = release;
 
-  const { longDateFormat, timeFormat, timeZone } = useSelector(
-    createUISettingsSelector()
-  );
+  const { longDateFormat, timeFormat, timeZone } = useUiSettingsValues();
 
   const [isConfirmGrabModalOpen, setIsConfirmGrabModalOpen] = useState(false);
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
@@ -193,6 +190,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       >
         {formatAge(age, ageHours, ageMinutes)}
       </TableRowCell>
+
       <TableRowCell>
         <div className={styles.titleContent}>
           <Link to={infoUrl}>{title}</Link>
@@ -210,6 +208,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           />
         </div>
       </TableRowCell>
+
       <TableRowCell className={styles.indexer}>{indexer}</TableRowCell>
 
       <TableRowCell className={styles.history}>
@@ -263,17 +262,21 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       </TableRowCell>
 
       <TableRowCell className={styles.size}>{formatBytes(size)}</TableRowCell>
+
       <TableRowCell className={styles.peers}>
         {protocol === 'torrent' ? (
           <Peers seeders={seeders} leechers={leechers} />
         ) : null}
       </TableRowCell>
+
       <TableRowCell className={styles.languages}>
         <EpisodeLanguages languages={languages} />
       </TableRowCell>
+
       <TableRowCell className={styles.quality}>
         <EpisodeQuality quality={quality} showRevision={true} />
       </TableRowCell>
+
       <TableRowCell className={styles.customFormatScore}>
         <Tooltip
           anchor={formatCustomFormatScore(
@@ -284,6 +287,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           position={tooltipPositions.LEFT}
         />
       </TableRowCell>
+
       <TableRowCell className={styles.indexerFlags}>
         {indexerFlags ? (
           <Popover
@@ -294,6 +298,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           />
         ) : null}
       </TableRowCell>
+
       <TableRowCell className={styles.rejected}>
         {rejections.length ? (
           <Popover
@@ -310,6 +315,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           />
         ) : null}
       </TableRowCell>
+
       <TableRowCell className={styles.download}>
         <SpinnerIconButton
           name={getDownloadIcon(isGrabbing, isGrabbed, grabError)}
@@ -339,6 +345,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           </div>
         </Link>
       </TableRowCell>
+
       <ConfirmModal
         isOpen={isConfirmGrabModalOpen}
         kind={kinds.WARNING}
@@ -350,6 +357,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         onConfirm={onGrabConfirm}
         onCancel={onGrabCancel}
       />
+
       <OverrideMatchModal
         isOpen={isOverrideModalOpen}
         title={title}

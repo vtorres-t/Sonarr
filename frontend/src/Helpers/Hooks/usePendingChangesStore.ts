@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { create, useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -14,48 +14,56 @@ interface PendingChangesStore<T extends object> {
 export const usePendingChangesStore = <T extends object>(
   initialPendingChanges: Partial<T>
 ) => {
-  const store = useRef(
-    create<PendingChangesStore<T>>()((_set) => {
+  // eslint-disable-next-line react/hook-use-state
+  const [store] = useState(() => {
+    return create<PendingChangesStore<T>>()((_set) => {
       return {
         pendingChanges: initialPendingChanges,
       };
-    })
+    });
+  });
+
+  const setPendingChange = useCallback(
+    <K extends keyof T>(key: K, value: T[K]) => {
+      store.setState((state) => ({
+        ...state,
+        pendingChanges: {
+          ...state.pendingChanges,
+          [key]: value,
+        },
+      }));
+    },
+    [store]
   );
 
-  const usePendingChanges = () => {
-    return useStore(
-      store.current,
-      useShallow((state) => {
-        return state.pendingChanges as Partial<T>;
-      })
-    );
-  };
+  const unsetPendingChange = useCallback(
+    <K extends keyof T>(key: K) => {
+      store.setState((state) => {
+        const newPendingChanges = { ...state.pendingChanges };
+        delete newPendingChanges[key];
 
-  const setPendingChange = <K extends keyof T>(key: K, value: T[K]) => {
-    store.current.setState((state) => ({
+        return {
+          ...state,
+          pendingChanges: newPendingChanges,
+        };
+      });
+    },
+    [store]
+  );
+
+  const clearPendingChanges = useCallback(() => {
+    store.setState((state) => ({
       ...state,
-      pendingChanges: {
-        ...state.pendingChanges,
-        [key]: value,
-      },
+      pendingChanges: {},
     }));
-  };
+  }, [store]);
 
-  const setPendingChanges = (changes: Partial<T>) => {
-    store.current.setState((state) => ({
-      ...state,
-      pendingChanges: {
-        ...state.pendingChanges,
-        ...changes,
-      },
-    }));
-  };
-
-  const discardPendingChanges = () => {
-    return setPendingChanges({} as Partial<T>);
-  };
-
-  const pendingChanges = usePendingChanges();
+  const pendingChanges = useStore(
+    store,
+    useShallow((state) => {
+      return state.pendingChanges as Partial<T>;
+    })
+  );
 
   const hasPendingChanges = useMemo(() => {
     return Object.keys(pendingChanges).length > 0;
@@ -65,7 +73,8 @@ export const usePendingChangesStore = <T extends object>(
     store,
     pendingChanges,
     setPendingChange,
-    discardPendingChanges,
+    unsetPendingChange,
+    clearPendingChanges,
     hasPendingChanges,
   };
 };
