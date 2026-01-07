@@ -226,8 +226,6 @@ namespace NzbDrone.Core.Configuration
                 : GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
 
         public bool TrustCgnatIpAddresses => _authOptions.TrustCgnatIpAddresses ?? GetValueBoolean("TrustCgnatIpAddresses", false, persist: false);
-
-
         public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "debug").ToLowerInvariant();
         public string ConsoleLogLevel => _logOptions.ConsoleLevel ?? GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
