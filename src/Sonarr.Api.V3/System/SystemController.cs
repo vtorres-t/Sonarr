@@ -76,6 +76,7 @@ namespace Sonarr.Api.V3.System
                 IsOsx = OsInfo.IsOsx,
                 IsWindows = OsInfo.IsWindows,
                 IsDocker = _osInfo.IsDocker,
+                IsContainerized = _osInfo.IsContainerized,
                 Mode = _runtimeInfo.Mode,
                 Authentication = _configFileProvider.AuthenticationMethod,
                 DatabaseType = _database.DatabaseType,
