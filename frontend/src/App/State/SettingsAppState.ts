@@ -7,10 +7,6 @@ import AppSectionState, {
   PagedAppSectionState,
 } from 'App/State/AppSectionState';
 import Language from 'Language/Language';
-import {
-  NamingExamples,
-  NamingSettingsModel,
-} from 'Settings/MediaManagement/Naming/useNamingSettings';
 import AutoTagging, { AutoTaggingSpecification } from 'typings/AutoTagging';
 import CustomFormat from 'typings/CustomFormat';
 import CustomFormatSpecification from 'typings/CustomFormatSpecification';
@@ -24,7 +20,6 @@ import IndexerFlag from 'typings/IndexerFlag';
 import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 import General from 'typings/Settings/General';
 import IndexerOptions from 'typings/Settings/IndexerOptions';
-import MediaManagement from 'typings/Settings/MediaManagement';
 
 type Presets<T> = T & {
   presets: T[];
@@ -61,16 +56,6 @@ export interface DownloadClientOptionsAppState
 export interface GeneralAppState
   extends AppSectionItemState<General>,
     AppSectionSaveState {}
-
-export interface MediaManagementAppState
-  extends AppSectionItemState<MediaManagement>,
-    AppSectionSaveState {}
-
-export interface NamingAppState
-  extends AppSectionItemState<NamingSettingsModel>,
-    AppSectionSaveState {}
-
-export type NamingExamplesAppState = AppSectionItemState<NamingExamples>;
 
 export interface ImportListAppState
   extends AppSectionState<ImportList>,
@@ -134,9 +119,6 @@ interface SettingsAppState {
   indexerOptions: IndexerOptionsAppState;
   indexers: IndexerAppState;
   languages: LanguageSettingsAppState;
-  mediaManagement: MediaManagementAppState;
-  naming: NamingAppState;
-  namingExamples: NamingExamplesAppState;
 }
 
 export default SettingsAppState;
