@@ -19,6 +19,7 @@ import HostSettings from './HostSettings';
 import LoggingSettings from './LoggingSettings';
 import ProxySettings from './ProxySettings';
 import SecuritySettings from './SecuritySettings';
+import { useManageGeneralSettings } from './useGeneralSettings';
 
 const requiresRestartKeys = [
   'bindAddress',

@@ -95,8 +95,8 @@ public class CalendarFeedController : Controller
             }
         }
 
-        var serializer = (IStringSerializer)new SerializerFactory().Build(calendar.GetType(), new SerializationContext());
-        var icalendar = serializer.SerializeToString(calendar);
+        var serializer = new SerializerFactory().Build(calendar?.GetType(), new SerializationContext());
+        var icalendar = ((IStringSerializer)serializer.NullSafe()).SerializeToString(calendar);
 
         return TypedResults.Content(icalendar, "text/calendar");
     }

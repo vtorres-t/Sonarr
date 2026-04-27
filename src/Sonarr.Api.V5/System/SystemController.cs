@@ -87,7 +87,7 @@ public class SystemController : Controller
             StartTime = _runtimeInfo.StartTime,
             PackageVersion = _deploymentInfoProvider.PackageVersion,
             PackageAuthor = _deploymentInfoProvider.PackageAuthor,
-        };
+        });
     }
 
     [HttpGet("routes")]

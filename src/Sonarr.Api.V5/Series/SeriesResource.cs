@@ -4,7 +4,6 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 using Sonarr.Http.REST;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Api.V5.Series;
 
@@ -57,7 +56,6 @@ public class SeriesResource : RestResource
     public SeriesStatisticsResource? Statistics { get; set; }
     public bool? EpisodesChanged { get; set; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    [SwaggerIgnore]
     public bool? IsExcluded { get; set; }
 }
 
