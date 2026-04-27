@@ -1,4 +1,6 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.REST;
@@ -9,41 +11,45 @@ namespace Sonarr.Api.V5.Settings
     public abstract class SettingsController<TResource> : RestController<TResource>
         where TResource : RestResource, new()
     {
-        protected readonly IConfigService _configService;
+        private readonly IConfigFileProvider _configFileProvider;
+        private readonly IConfigService _configService;
 
-        protected SettingsController(IConfigService configService)
+        protected SettingsController(IConfigFileProvider configFileProvider, IConfigService configService)
         {
+            _configFileProvider = configFileProvider;
             _configService = configService;
         }
 
         protected override TResource GetResourceById(int id)
         {
-            return GetConfig();
-        }
-
-        [HttpGet]
-        [Produces("application/json")]
-        public TResource GetConfig()
-        {
-            var resource = ToResource(_configService);
-            resource.Id = 1;
+            var resource = ToResource(_configFileProvider, _configService);
+            resource.Id = id;
 
             return resource;
         }
 
+        [HttpGet]
+        [Produces("application/json")]
+        public Ok<TResource> GetConfig()
+        {
+            return TypedResults.Ok(GetResourceById(1));
+        }
+
         [RestPutById]
         [Consumes("application/json")]
-        public virtual ActionResult<TResource> SaveConfig([FromBody] TResource resource)
+        [Produces("application/json")]
+        public virtual Results<Accepted<TResource>, NotFound> SaveSettings([FromBody] TResource resource)
         {
             var dictionary = resource.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(resource, null));
 
+            _configFileProvider.SaveConfigDictionary(dictionary);
             _configService.SaveConfigDictionary(dictionary);
 
-            return Accepted(resource.Id);
+            return TypedAccepted(resource.Id);
         }
 
-        protected abstract TResource ToResource(IConfigService model);
+        protected abstract TResource ToResource(IConfigFileProvider configFile, IConfigService model);
     }
 }

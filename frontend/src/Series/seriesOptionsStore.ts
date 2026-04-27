@@ -126,6 +126,12 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           isVisible: false,
         },
         {
+          name: 'originalCountry',
+          label: () => translate('OriginalCountry'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
           name: 'originalLanguage',
           label: () => translate('OriginalLanguage'),
           isSortable: true,
@@ -186,6 +192,12 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           isVisible: false,
         },
         {
+          name: 'averageSizePerEpisode',
+          label: () => translate('AverageSize'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
           name: 'genres',
           label: () => translate('Genres'),
           isSortable: false,
@@ -206,6 +218,18 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
         {
           name: 'releaseGroups',
           label: () => translate('ReleaseGroups'),
+          isSortable: false,
+          isVisible: false,
+        },
+        {
+          name: 'releaseTypes',
+          label: () => translate('ReleaseTypes'),
+          isSortable: false,
+          isVisible: false,
+        },
+        {
+          name: 'episodeFileQualities',
+          label: () => translate('EpisodeFileQualities'),
           isSortable: false,
           isVisible: false,
         },
