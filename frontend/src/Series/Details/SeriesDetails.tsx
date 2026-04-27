@@ -29,12 +29,13 @@ import {
   tooltipPositions,
 } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
+import useCountryName from 'Internationalization/useCountryName';
 import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
-import { Image, Statistics } from 'Series/Series';
+import { Image, SeriesStatus, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
@@ -65,10 +66,22 @@ function getFanartUrl(images: Image[]) {
   return images.find((image) => image.coverType === 'fanart')?.url;
 }
 
-function getDateYear(date: string | undefined) {
-  const dateDate = moment.utc(date);
+function getDateYear(date: string) {
+  return moment.utc(date).format('YYYY');
+}
 
-  return dateDate.format('YYYY');
+function getRunningYears(
+  status: SeriesStatus,
+  year: number,
+  lastAired: string | undefined
+) {
+  if (year === 0) {
+    return null;
+  }
+
+  return status === 'ended' && lastAired
+    ? `${year}-${getDateYear(lastAired)}`
+    : `${year}-`;
 }
 
 interface ExpandedState {
@@ -347,6 +360,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     refetchEpisodeFiles();
   }, [refetchEpisodes, refetchEpisodeFiles]);
 
+  const originalCountryName = useCountryName(series?.originalCountry);
+
   useEffect(() => {
     populate();
   }, [populate]);
@@ -390,18 +405,13 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     genres,
     tags,
     year,
+    lastAired,
   } = series;
 
-  const {
-    episodeCount = 0,
-    episodeFileCount = 0,
-    sizeOnDisk = 0,
-    lastAired,
-  } = statistics;
+  const { episodeCount = 0, episodeFileCount = 0, sizeOnDisk = 0 } = statistics;
 
   const statusDetails = getSeriesStatusDetails(status);
-  const runningYears =
-    status === 'ended' ? `${year}-${getDateYear(lastAired)}` : `${year}-`;
+  const runningYears = getRunningYears(status, year, lastAired);
 
   let episodeFilesCountMessage = translate('SeriesDetailsNoEpisodeFiles');
 
@@ -570,6 +580,9 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         title={translate('SeriesDetailsGoTo', {
                           title: previousSeries.title,
                         })}
+                        aria-label={translate('SeriesDetailsGoTo', {
+                          title: previousSeries.title,
+                        })}
                         to={`/series/${previousSeries.titleSlug}`}
                       />
                     ) : null}
@@ -580,6 +593,9 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         name={icons.ARROW_RIGHT}
                         size={30}
                         title={translate('SeriesDetailsGoTo', {
+                          title: nextSeries.title,
+                        })}
+                        aria-label={translate('SeriesDetailsGoTo', {
                           title: nextSeries.title,
                         })}
                         to={`/series/${nextSeries.titleSlug}`}
@@ -688,6 +704,21 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         <Icon name={icons.LANGUAGE} size={17} />
                         <span className={styles.originalLanguageName}>
                           {originalLanguage.name}
+                        </span>
+                      </div>
+                    </Label>
+                  ) : null}
+
+                  {originalCountryName ? (
+                    <Label
+                      className={styles.detailsLabel}
+                      title={translate('OriginalCountry')}
+                      size={sizes.LARGE}
+                    >
+                      <div>
+                        <Icon name={icons.GLOBE} size={17} />
+                        <span className={styles.originalCountry}>
+                          {originalCountryName}
                         </span>
                       </div>
                     </Label>

@@ -4,7 +4,6 @@ import AppSectionState, {
   AppSectionListState,
   AppSectionSaveState,
   AppSectionSchemaState,
-  PagedAppSectionState,
 } from 'App/State/AppSectionState';
 import AutoTagging, { AutoTaggingSpecification } from 'typings/AutoTagging';
 import CustomFormat from 'typings/CustomFormat';
@@ -12,13 +11,8 @@ import CustomFormatSpecification from 'typings/CustomFormatSpecification';
 import DelayProfile from 'typings/DelayProfile';
 import DownloadClient from 'typings/DownloadClient';
 import ImportList from 'typings/ImportList';
-import ImportListExclusion from 'typings/ImportListExclusion';
 import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
-import Indexer from 'typings/Indexer';
-import IndexerFlag from 'typings/IndexerFlag';
 import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
-import General from 'typings/Settings/General';
-import IndexerOptions from 'typings/Settings/IndexerOptions';
 
 type Presets<T> = T & {
   presets: T[];
@@ -52,27 +46,11 @@ export interface DownloadClientOptionsAppState
   extends AppSectionItemState<DownloadClientOptions>,
     AppSectionSaveState {}
 
-export interface GeneralAppState
-  extends AppSectionItemState<General>,
-    AppSectionSaveState {}
-
 export interface ImportListAppState
   extends AppSectionState<ImportList>,
     AppSectionDeleteState,
     AppSectionSaveState,
     AppSectionSchemaState<Presets<ImportList>> {
-  isTestingAll: boolean;
-}
-
-export interface IndexerOptionsAppState
-  extends AppSectionItemState<IndexerOptions>,
-    AppSectionSaveState {}
-
-export interface IndexerAppState
-  extends AppSectionState<Indexer>,
-    AppSectionDeleteState,
-    AppSectionSaveState,
-    AppSectionSchemaState<Presets<Indexer>> {
   isTestingAll: boolean;
 }
 
@@ -91,16 +69,6 @@ export interface ImportListOptionsSettingsAppState
   extends AppSectionItemState<ImportListOptionsSettings>,
     AppSectionSaveState {}
 
-export interface ImportListExclusionsSettingsAppState
-  extends AppSectionState<ImportListExclusion>,
-    AppSectionSaveState,
-    PagedAppSectionState,
-    AppSectionDeleteState {
-  pendingChanges: Partial<ImportListExclusion>;
-}
-
-export type IndexerFlagSettingsAppState = AppSectionState<IndexerFlag>;
-
 interface SettingsAppState {
   autoTaggings: AutoTaggingAppState;
   autoTaggingSpecifications: AutoTaggingSpecificationAppState;
@@ -109,13 +77,8 @@ interface SettingsAppState {
   delayProfiles: DelayProfileAppState;
   downloadClients: DownloadClientAppState;
   downloadClientOptions: DownloadClientOptionsAppState;
-  general: GeneralAppState;
-  importListExclusions: ImportListExclusionsSettingsAppState;
   importListOptions: ImportListOptionsSettingsAppState;
   importLists: ImportListAppState;
-  indexerFlags: IndexerFlagSettingsAppState;
-  indexerOptions: IndexerOptionsAppState;
-  indexers: IndexerAppState;
 }
 
 export default SettingsAppState;
