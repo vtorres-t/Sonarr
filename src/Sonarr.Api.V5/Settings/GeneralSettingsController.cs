@@ -55,12 +55,6 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
             .IsValidCertificate()
             .When(c => c.EnableSsl);
 
-        SharedValidator.RuleFor(c => c.SslKeyPath)
-            .NotEmpty()
-            .IsValidPath()
-            .SetValidator(new FileExistsValidator(diskProvider))
-            .When(c => c.SslKeyPath.IsNotNullOrWhiteSpace());
-
         SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);
 
         SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'main' is the default");

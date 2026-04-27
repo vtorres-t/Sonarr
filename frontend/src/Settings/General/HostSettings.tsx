@@ -19,7 +19,6 @@ interface HostSettingsProps {
   applicationUrl: PendingSection<GeneralSettingsModel>['applicationUrl'];
   enableSsl: PendingSection<GeneralSettingsModel>['enableSsl'];
   sslPort: PendingSection<GeneralSettingsModel>['sslPort'];
-  sslKeyPath: PendingSection<GeneralSettingsModel>['sslKeyPath'];
   sslCertPath: PendingSection<GeneralSettingsModel>['sslCertPath'];
   sslCertPassword: PendingSection<GeneralSettingsModel>['sslCertPassword'];
   launchBrowser: PendingSection<GeneralSettingsModel>['launchBrowser'];

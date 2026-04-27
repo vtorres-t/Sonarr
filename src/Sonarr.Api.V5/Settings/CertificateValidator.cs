@@ -3,7 +3,6 @@ using System.Security.Cryptography.X509Certificates;
 using FluentValidation;
 using FluentValidation.Validators;
 using NLog;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
 namespace Sonarr.Api.V5.Settings
@@ -35,17 +34,12 @@ namespace Sonarr.Api.V5.Settings
             }
 
             var certPath = resource.SslCertPath!;
-            var keyPath = resource.SslKeyPath;
             var certPassword = resource.SslCertPassword;
             var type = X509Certificate2.GetCertContentType(certPath);
 
             try
             {
-                if (type == X509ContentType.Cert)
-                {
-                    X509Certificate2.CreateFromPemFile(certPath, keyPath.IsNullOrWhiteSpace() ? null : keyPath);
-                }
-                else if (type == X509ContentType.Pkcs12)
+                if (type == X509ContentType.Pkcs12)
                 {
                     X509CertificateLoader.LoadPkcs12FromFile(certPath, certPassword, X509KeyStorageFlags.DefaultKeySet);
                 }
