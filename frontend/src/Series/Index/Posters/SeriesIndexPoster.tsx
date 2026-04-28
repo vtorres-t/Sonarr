@@ -103,6 +103,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     status,
     path,
     titleSlug,
+    originalCountry,
     originalLanguage,
     network,
     nextAiring,
@@ -161,6 +162,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             className={styles.action}
             name={icons.EDIT}
             title={translate('EditSeries')}
+            aria-label={translate('EditSeries')}
             tabIndex={-1}
             onPress={onEditSeriesPress}
           />
@@ -256,6 +258,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
       ) : null}
 
       <SeriesIndexPosterInfo
+        originalCountry={originalCountry}
         originalLanguage={originalLanguage}
         network={network}
         previousAiring={previousAiring}

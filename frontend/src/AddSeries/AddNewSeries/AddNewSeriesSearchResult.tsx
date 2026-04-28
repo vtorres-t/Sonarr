@@ -33,6 +33,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     overview,
     seriesType,
     images,
+    isExcluded,
   } = series;
 
   const isExistingSeries = useExistingSeries(tvdbId);
@@ -63,7 +64,13 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
 
   return (
     <div className={styles.searchResult}>
-      <Link className={styles.underlay} {...linkProps} />
+      <Link
+        className={styles.underlay}
+        aria-label={
+          isExistingSeries ? title : translate('AddSeriesWithTitle', { title })
+        }
+        {...linkProps}
+      />
 
       <div className={styles.overlay}>
         {isSmallScreen ? null : (
@@ -99,15 +106,26 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
                 />
               ) : null}
 
+              {isExcluded ? (
+                <Icon
+                  className={styles.excludedIcon}
+                  name={icons.DANGER}
+                  size={36}
+                  title={translate('SeriesInImportListExclusions')}
+                />
+              ) : null}
+
               <Link
                 className={styles.tvdbLink}
                 to={`https://www.thetvdb.com/?tab=series&id=${tvdbId}`}
+                aria-label={translate('ViewSeriesOnTvdb', { title })}
                 onPress={handleTvdbLinkPress}
               >
                 <Icon
                   className={styles.tvdbLinkIcon}
                   name={icons.EXTERNAL_LINK}
                   size={28}
+                  aria-hidden={true}
                 />
               </Link>
             </div>

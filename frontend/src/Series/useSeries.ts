@@ -113,6 +113,14 @@ const SORT_PREDICATES = {
     return item.statistics?.sizeOnDisk ?? 0;
   },
 
+  averageSizePerEpisode: (item: Series, _direction: SortDirection) => {
+    const totalEpisodeCount = item.statistics?.totalEpisodeCount ?? 0;
+
+    return totalEpisodeCount > 0
+      ? (item.statistics?.sizeOnDisk ?? 0) / totalEpisodeCount
+      : 0;
+  },
+
   network: (item: Series, _direction: SortDirection) => {
     const network = item.network;
 
@@ -246,6 +254,24 @@ const FILTER_PREDICATES = {
     return predicate(releaseGroups, filterValue);
   },
 
+  releaseTypes: (item: Series, filterValue: string[], type: FilterType) => {
+    const releaseTypes = item.statistics?.releaseTypes ?? [];
+    const predicate = getFilterTypePredicate(type);
+    return predicate(releaseTypes, filterValue);
+  },
+
+  episodeFileQualities: (
+    item: Series,
+    filterValue: number[],
+    type: FilterType
+  ) => {
+    const episodeFileQualities = (
+      item.statistics?.episodeFileQualities ?? []
+    ).map((q) => q.id);
+    const predicate = getFilterTypePredicate(type);
+    return predicate(episodeFileQualities, filterValue);
+  },
+
   seasonCount: (item: Series, filterValue: number, type: FilterType) => {
     const predicate = getFilterTypePredicate(type);
     const seasonCount = item.statistics?.seasonCount ?? 0;
@@ -256,6 +282,20 @@ const FILTER_PREDICATES = {
     const predicate = getFilterTypePredicate(type);
     const sizeOnDisk = item.statistics?.sizeOnDisk ?? 0;
     return predicate(sizeOnDisk, filterValue);
+  },
+
+  averageSizePerEpisode: (
+    item: Series,
+    filterValue: number,
+    type: FilterType
+  ) => {
+    const predicate = getFilterTypePredicate(type);
+    const totalEpisodeCount = item.statistics?.totalEpisodeCount ?? 0;
+    const averageSize =
+      totalEpisodeCount > 0
+        ? (item.statistics?.sizeOnDisk ?? 0) / totalEpisodeCount
+        : 0;
+    return predicate(averageSize, filterValue);
   },
 
   hasMissingSeason: (item: Series, filterValue: boolean, type: FilterType) => {
@@ -445,6 +485,12 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     valueType: filterBuilderValueTypes.BYTES,
   },
   {
+    name: 'averageSizePerEpisode',
+    label: () => translate('AverageSizePerEpisode'),
+    type: filterBuilderTypes.NUMBER,
+    valueType: filterBuilderValueTypes.BYTES,
+  },
+  {
     name: 'genres',
     label: () => translate('Genres'),
     type: filterBuilderTypes.ARRAY,
@@ -492,6 +538,18 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'releaseGroups',
     label: () => translate('ReleaseGroups'),
     type: filterBuilderTypes.ARRAY,
+  },
+  {
+    name: 'releaseTypes',
+    label: () => translate('ReleaseTypes'),
+    type: filterBuilderTypes.ARRAY,
+    valueType: filterBuilderValueTypes.RELEASE_TYPES,
+  },
+  {
+    name: 'episodeFileQualities',
+    label: () => translate('EpisodeFileQualities'),
+    type: filterBuilderTypes.ARRAY,
+    valueType: filterBuilderValueTypes.QUALITY,
   },
   {
     name: 'ratings',

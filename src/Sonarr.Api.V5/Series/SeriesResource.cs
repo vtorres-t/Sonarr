@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
@@ -47,12 +48,15 @@ public class SeriesResource : RestResource
     public string? Folder { get; set; }
     public string? Certification { get; set; }
     public List<string>? Genres { get; set; }
+    public string? OriginalCountry { get; set; }
     public HashSet<int>? Tags { get; set; }
     public DateTime Added { get; set; }
     public AddSeriesOptions? AddOptions { get; set; }
     public Ratings? Ratings { get; set; }
     public SeriesStatisticsResource? Statistics { get; set; }
     public bool? EpisodesChanged { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool? IsExcluded { get; set; }
 }
 
 public static class SeriesResourceMapper
@@ -71,6 +75,7 @@ public static class SeriesResourceMapper
             Images = model.Images.JsonClone(),
             Seasons = model.Seasons.ToResource(includeSeasonImages),
             Year = model.Year,
+            OriginalCountry = model.OriginalCountry,
             OriginalLanguage = model.OriginalLanguage,
             Path = model.Path,
             QualityProfileId = model.QualityProfileId,
