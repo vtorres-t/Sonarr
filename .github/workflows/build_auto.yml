@@ -3,7 +3,7 @@ name: Build Auto
 on:
   pull_request:
     branches:
-      - devel
+      - develop
     paths-ignore:
       - "src/NzbDrone.Core/Localization/Core/**"
       - "src/Sonarr.Api.*/openapi.json"

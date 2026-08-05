@@ -11,7 +11,7 @@ on:
       branch:
         description: "Git branch used for this build"
         type: string
-        default: "devel"
+        default: "develop"
         required: true
       version:
         description: "Sonarr version"
