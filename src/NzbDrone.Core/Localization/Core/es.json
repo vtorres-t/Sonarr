@@ -436,8 +436,6 @@
     "DoNotUpgradeAutomatically": "No actualizar automáticamente",
     "Docker": "Docker",
     "DockerUpdater": "Actualiza el contenedor docker para recibir la actualización",
-    "Donate": "Donar",
-    "Donations": "Donaciones",
     "DoneEditingGroups": "Terminado de editar grupos",
     "DoneEditingSizes": "Finalizada la edición de tamaños",
     "DotNetVersion": ".NET",

@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.Localization
 
             var localizedString = Subject.GetLocalizedString("UiLanguage");
 
-            localizedString.Should().Be("Langue de l'interface utilisateur");
+            localizedString.Should().Be("Idioma de interfaz");
 
             ExceptionVerification.ExpectedErrors(1);
         }

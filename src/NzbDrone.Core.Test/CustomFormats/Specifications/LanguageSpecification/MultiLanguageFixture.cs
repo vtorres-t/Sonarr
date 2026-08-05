@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         [Test]
         public void should_not_match_different_language()
         {
-            Subject.Value = Language.Spanish.Id;
+            Subject.Value = Language.French.Id;
             Subject.Negate = false;
 
             Subject.IsSatisfiedBy(_input).Should().BeFalse();
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         [Test]
         public void should_not_match_negated_when_all_languages_do_not_match()
         {
-            Subject.Value = Language.Spanish.Id;
+            Subject.Value = Language.French.Id;
             Subject.Negate = true;
 
             Subject.IsSatisfiedBy(_input).Should().BeTrue();
