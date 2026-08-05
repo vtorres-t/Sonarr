@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.Localization
 
             localizedString.Should().Be("Idioma de interfaz");
 
-            ExceptionVerification.ExpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(0);
         }
 
         [Test]

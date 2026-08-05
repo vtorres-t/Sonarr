@@ -16,7 +16,6 @@ import ImportListSettings from 'Settings/ImportLists/ImportListSettings';
 import IndexerSettings from 'Settings/Indexers/IndexerSettings';
 import MediaManagement from 'Settings/MediaManagement/MediaManagement';
 import MetadataSettings from 'Settings/Metadata/MetadataSettings';
-import MetadataSourceSettings from 'Settings/MetadataSource/MetadataSourceSettings';
 import NotificationSettings from 'Settings/Notifications/NotificationSettings';
 import Profiles from 'Settings/Profiles/Profiles';
 import Quality from 'Settings/Quality/Quality';
@@ -110,11 +109,6 @@ export function appRouteElements() {
       <Route path="/settings/connect" element={<NotificationSettings />} />
 
       <Route path="/settings/metadata" element={<MetadataSettings />} />
-
-      <Route
-        path="/settings/metadatasource"
-        element={<MetadataSourceSettings />}
-      />
 
       <Route path="/settings/tags" element={<TagSettings />} />
 
