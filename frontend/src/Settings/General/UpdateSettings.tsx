@@ -13,7 +13,7 @@ import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import { GeneralSettingsModel } from './useGeneralSettings';
 
-const branchValues = ['main', 'develop'];
+const branchValues = ['master', 'develop'];
 
 interface UpdateSettingsProps {
   branch: PendingSection<GeneralSettingsModel>['branch'];
