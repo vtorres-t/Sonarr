@@ -36,7 +36,6 @@ namespace NzbDrone.Core.Configuration
         bool LaunchBrowser { get; }
         AuthenticationType AuthenticationMethod { get; }
         AuthenticationRequiredType AuthenticationRequired { get; }
-        bool AnalyticsEnabled { get; }
         string LogLevel { get; }
         string ConsoleLogLevel { get; }
         ConsoleLogFormat ConsoleLogFormat { get; }
@@ -242,8 +241,6 @@ namespace NzbDrone.Core.Configuration
                 : GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
 
         public bool TrustCgnatIpAddresses => _authOptions.TrustCgnatIpAddresses ?? GetValueBoolean("TrustCgnatIpAddresses", false, persist: false);
-
-        public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
 
         public string Branch => _updateOptions.Branch ?? GetValue("Branch", "master").ToLowerInvariant();
 

@@ -19,7 +19,6 @@ export interface GeneralSettingsModel {
   launchBrowser: boolean;
   authenticationMethod: string;
   authenticationRequired: string;
-  analyticsEnabled: boolean;
   username: string;
   password: string;
   passwordConfirmation: string;

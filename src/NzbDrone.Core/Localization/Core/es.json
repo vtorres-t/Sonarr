@@ -87,8 +87,6 @@
     "AnEpisodeIsDownloading": "Un episodio se esta descargando",
     "AnalyseVideoFiles": "Analizar archivos de video",
     "AnalyseVideoFilesHelpText": "Extrae información de video como la resolución, el tiempo de ejecución y la información del códec de los archivos. Esto requiere que {appName} lea partes del archivo lo cual puede causar una alta actividad en el disco o en la red durante los escaneos.",
-    "Analytics": "Analíticas",
-    "AnalyticsEnabledHelpText": "Envía información anónima de uso y error a los servidores de {appName}. Esto incluye información sobre tu navegador, qué páginas de interfaz web de {appName} utilizas, informes de errores, así como el sistema operativo y la versión en tiempo de ejecución. Usaremos esta información para priorizar funciones y correcciones de errores.",
     "Anime": "Anime",
     "AnimeEpisodeFormat": "Formato de Episodio de Anime",
     "AnimeEpisodeTypeDescription": "Episodios lanzados usando un número de episodio absoluto",
