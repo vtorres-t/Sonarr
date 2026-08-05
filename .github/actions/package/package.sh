@@ -21,13 +21,15 @@ do
     
   echo "Creating package for $name"
 
+  echo "Clean UI"
+  rm -rf $uiFolder/*.map
+
   echo "Copying UI"
   cp -r $uiFolder $sonarrFolder
   
   echo "Setting permissions"
   find $sonarrFolder -name "ffprobe" -exec chmod a+x {} \;
   find $sonarrFolder -name "Sonarr" -exec chmod a+x {} \;
-  find $sonarrFolder -name "Sonarr.Update" -exec chmod a+x {} \;
   
   if [[ "$name" == *"osx"* ]]; then
     echo "Creating macOS package"
@@ -53,6 +55,10 @@ do
 
   echo "Packaging Artifact"
   if [[ "$name" == *"linux"* ]] || [[ "$name" == *"osx"* ]] || [[ "$name" == *"freebsd"* ]]; then
+    echo "Removing Update Folder"
+    rm -rf $folderName/Sonarr.Update
+
+    echo "Packaging app Artifact"
     tar -zcf "./$artifactsFolder/$archiveName.tar.gz" -C $folderName Sonarr
 	fi
     

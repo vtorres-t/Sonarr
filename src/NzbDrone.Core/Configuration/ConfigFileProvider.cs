@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Configuration
 
         public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
 
-        public string Branch => _updateOptions.Branch ?? GetValue("Branch", "main").ToLowerInvariant();
+        public string Branch => _updateOptions.Branch ?? GetValue("Branch", "master").ToLowerInvariant();
 
         public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "debug").ToLowerInvariant();
         public string ConsoleLogLevel => _logOptions.ConsoleLevel ?? GetValue("ConsoleLogLevel", string.Empty, persist: false);

@@ -65,7 +65,7 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
 
         SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);
 
-        SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'main' is the default");
+        SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");
         SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
 
         SharedValidator.RuleFor(c => c.BackupFolder).IsValidPath().When(c => Path.IsPathRooted(c.BackupFolder));
