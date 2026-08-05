@@ -42,7 +42,6 @@ namespace NzbDrone.Core.Configuration
         bool LogSql { get; }
         int LogRotate { get; }
         int LogSizeLimit { get; }
-        bool FilterSentryEvents { get; }
         string Branch { get; }
         string ApiKey { get; }
         string SslCertPath { get; }
@@ -266,7 +265,6 @@ namespace NzbDrone.Core.Configuration
         public bool LogSql => _logOptions.Sql ?? GetValueBoolean("LogSql", false, persist: false);
         public int LogRotate => _logOptions.Rotate ?? GetValueInt("LogRotate", 50, persist: false);
         public int LogSizeLimit => Math.Min(Math.Max(_logOptions.SizeLimit ?? GetValueInt("LogSizeLimit", 1, persist: false), 0), 10);
-        public bool FilterSentryEvents => _logOptions.FilterSentryEvents ?? GetValueBoolean("FilterSentryEvents", true, persist: false);
         public string SslCertPath => _serverOptions.SslCertPath ?? GetValue("SslCertPath", "");
         public string SslKeyPath => _serverOptions.SslKeyPath ?? GetValue("SslKeyPath", "");
         public string SslCertPassword => _serverOptions.SslCertPassword ?? GetValue("SslCertPassword", "");
