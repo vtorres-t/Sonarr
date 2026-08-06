@@ -152,26 +152,37 @@ namespace NzbDrone.Common.Test.Http
             response.Content.Should().NotBeNullOrWhiteSpace();
         }
 
+        public async Task bad_ssl_should_pass_if_remote_validation_disabled()
+        {
+            Mocker.GetMock<IConfigService>().SetupGet(x => x.CertificateValidation).Returns(CertificateValidationType.Disabled);
+
+            using (var server = new LocalSelfSignedHttpsServer())
+            {
+                server.Start();
+                var request = new HttpRequest($"https://127.0.0.1:{server.Port}/");
+
+                await Subject.ExecuteAsync(request);
+            }
+
+            ExceptionVerification.ExpectedErrors(0);
+        }
+
         [TestCase(CertificateValidationType.Enabled)]
         [TestCase(CertificateValidationType.DisabledForLocalAddresses)]
         public void bad_ssl_should_fail_when_remote_validation_enabled(CertificateValidationType validationType)
         {
             Mocker.GetMock<IConfigService>().SetupGet(x => x.CertificateValidation).Returns(validationType);
-            var request = new HttpRequest($"https://expired.badssl.com");
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await Subject.ExecuteAsync(request));
+            using (var server = new LocalSelfSignedHttpsServer())
+            {
+                server.Start();
+                var request = new HttpRequest($"https://127.0.0.1:{server.Port}/");
+
+                // Al estar habilitada la validación, .NET detendrá la petición por el certificado inválido
+                Assert.ThrowsAsync<HttpRequestException>(async () => await Subject.ExecuteAsync(request));
+            }
+
             ExceptionVerification.ExpectedErrors(1);
-        }
-
-        [Test]
-        public async Task bad_ssl_should_pass_if_remote_validation_disabled()
-        {
-            Mocker.GetMock<IConfigService>().SetupGet(x => x.CertificateValidation).Returns(CertificateValidationType.Disabled);
-
-            var request = new HttpRequest($"https://expired.badssl.com");
-
-            await Subject.ExecuteAsync(request);
-            ExceptionVerification.ExpectedErrors(0);
         }
 
         [Test]
