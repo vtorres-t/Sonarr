@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 public class LocalSelfSignedHttpsServer : IDisposable
@@ -10,12 +10,16 @@ public class LocalSelfSignedHttpsServer : IDisposable
 
     public void Start()
     {
+        Port = GetFreeTcpPort();
+
         _listener = new HttpListener();
-        _listener.Prefixes.Add("https://127.0.0");
+
+        var prefix = $"https://127.0.0.1:{Port}/";
+        _listener.Prefixes.Add(prefix);
+
         _listener.Start();
 
-        Port = new Uri(_listener.Prefixes.First()).Port;
-
+        // Responder en bucle de fondo para no bloquear el hilo del test
         Task.Run(async () =>
         {
             try
@@ -37,9 +41,28 @@ public class LocalSelfSignedHttpsServer : IDisposable
         });
     }
 
+    // Método auxiliar para obtener un puerto libre real antes de iniciar el Listener
+    private int GetFreeTcpPort()
+    {
+        using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+        {
+            socket.Bind(new IPEndPoint(IPAddress.Loopback, 0));
+            return ((IPEndPoint)socket.LocalEndPoint).Port;
+        }
+    }
+
     public void Dispose()
     {
-        _listener?.Stop();
-        ((IDisposable)_listener)?.Dispose();
+        if (_listener != null)
+        {
+            try
+            {
+                _listener.Stop();
+                ((IDisposable)_listener).Dispose();
+            }
+            catch
+            { /* Ignorar fallos de limpieza en el desmantelamiento */
+            }
+        }
     }
 }
