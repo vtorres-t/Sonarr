@@ -2297,5 +2297,6 @@
     "Yes": "Sí",
     "YesCancel": "Sí, Cancelar",
     "Yesterday": "Ayer",
-    "YesterdayAt": "Ayer a las {time}"
+    "YesterdayAt": "Ayer a las {time}",
+    "Recent":  "Reciente"
 }
