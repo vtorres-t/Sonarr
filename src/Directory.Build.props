@@ -8,24 +8,19 @@
 
     <PlatformTarget>AnyCPU</PlatformTarget>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    <RuntimeIdentifiers>win-x64;win-x86;osx-x64;osx-arm64;linux-x64;linux-musl-x64;linux-arm;linux-arm64;linux-musl-arm64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>linux-x64;linux-musl-x64</RuntimeIdentifiers>
 
     <SonarrRootDir>$(MSBuildThisFileDirectory)..\</SonarrRootDir>
 
     <!-- Specifies the type of output -->
     <SonarrOutputType>Library</SonarrOutputType>
     <SonarrOutputType Condition="$(MSBuildProjectName.Contains('.Test'))">Test</SonarrOutputType>
-    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='ServiceInstall'">Exe</SonarrOutputType>
-    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='ServiceUninstall'">Exe</SonarrOutputType>
     <SonarrOutputType Condition="'$(MSBuildProjectName)'=='Sonarr'">Exe</SonarrOutputType>
     <SonarrOutputType Condition="'$(MSBuildProjectName)'=='Sonarr.Console'">Exe</SonarrOutputType>
-    <SonarrOutputType Condition="'$(MSBuildProjectName)'=='Sonarr.Update'">Update</SonarrOutputType>
 
     <!-- Specifies whether it's one of our own libraries -->
     <SonarrProject>false</SonarrProject>
     <SonarrProject Condition="$(MSBuildProjectName.StartsWith('Sonarr'))">true</SonarrProject>
-    <SonarrProject Condition="$(MSBuildProjectName.StartsWith('ServiceInstall'))">true</SonarrProject>
-    <SonarrProject Condition="$(MSBuildProjectName.StartsWith('ServiceUninstall'))">true</SonarrProject>
 
     <!-- A test project gets the test sdk packages automatically added -->
     <TestProject>false</TestProject>
@@ -49,7 +44,6 @@
     <!-- Output to _output and _tests respectively -->
     <OutputPath Condition="'$(SonarrProject)'=='true'">$(SonarrRootDir)_output\</OutputPath>
     <OutputPath Condition="'$(SonarrOutputType)'=='Test'">$(SonarrRootDir)_tests\</OutputPath>
-    <OutputPath Condition="'$(SonarrOutputType)'=='Update'">$(SonarrRootDir)_output\Sonarr.Update\</OutputPath>
 
     <!-- Paths relative to project file for better readability -->
     <EnableBaseIntermediateOutputPathMismatchWarning>false</EnableBaseIntermediateOutputPathMismatchWarning>

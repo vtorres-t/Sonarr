@@ -39,27 +39,6 @@ runs:
         echo "SONARR_VERSION=${{ inputs.version }}" >> "$GITHUB_ENV"
         echo "BRANCH=${{ inputs.branch }}" >> "$GITHUB_ENV"
 
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          echo "NUGET_PACKAGES=D:\nuget\packages" >> "$GITHUB_ENV"
-        fi
-
-    - name: Enable Extra Platforms In SDK
-      if: ${{ inputs.runtime == 'freebsd-x64' }}
-      shell: bash
-      run: |
-        BUNDLEDVERSIONS="${SDK_PATH}/Microsoft.NETCoreSdk.BundledVersions.props"
-
-        if grep -q freebsd-x64 "$BUNDLEDVERSIONS"; then
-          echo "Extra platforms already enabled"
-        else
-          echo "Enabling extra platform support"
-          sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64/' "$BUNDLEDVERSIONS"
-        fi
-
-        if grep -qv freebsd-x64 src/Directory.Build.props; then
-          sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64</RuntimeIdentifiers>^g" src/Directory.Build.props
-        fi
-
     - name: Update Version Number
       shell: bash
       run: |
@@ -67,7 +46,6 @@ runs:
           echo "Updating version info to: $SONARR_VERSION"
           sed -i'' -e "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$SONARR_VERSION<\/AssemblyVersion>/g" src/Directory.Build.props
           sed -i'' -e "s/<AssemblyConfiguration>[\$()A-Za-z-]\+<\/AssemblyConfiguration>/<AssemblyConfiguration>${BRANCH}<\/AssemblyConfiguration>/g" src/Directory.Build.props
-          sed -i'' -e "s/<string>10.0.0.0<\/string>/<string>$SONARR_VERSION<\/string>/g" distribution/macOS/Sonarr.app/Contents/Info.plist
         fi
 
     - name: Build Backend
