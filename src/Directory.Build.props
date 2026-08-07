@@ -175,22 +175,10 @@
     </Otherwise>
   </Choose>
 
-  <PropertyGroup Condition="'$(IsWindows)' == 'true' and
-                            '$(RuntimeIdentifier)' == ''">
-    <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
-    <RuntimeIdentifier>win-$(Architecture)</RuntimeIdentifier>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(IsLinux)' == 'true' and
                             '$(RuntimeIdentifier)' == ''">
     <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
     <RuntimeIdentifier>linux-$(Architecture)</RuntimeIdentifier>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(IsOSX)' == 'true' and
-                            '$(RuntimeIdentifier)' == ''">
-    <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
-    <RuntimeIdentifier>osx-$(Architecture)</RuntimeIdentifier>
   </PropertyGroup>
 
 </Project>
