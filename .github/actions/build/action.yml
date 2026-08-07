@@ -104,18 +104,15 @@ runs:
 
         rm -rf _output/$framework/$runtime/publish/*.xml
         rm -rf _output/$framework/$runtime/publish/*.pdb
-        rm -rf _output/Sonarr.Update/$framework/$runtime/publish/*.xml
-        rm -rf _output/Sonarr.Update/$framework/$runtime/publish/*.pdb
 
         case "${SPLIT[0]}" in
-          linux|freebsd*)
+          linux*)
             folder=_artifacts/$runtime/$framework/Sonarr
 
             echo "Packaging files"
             rm -rf $folder
             mkdir -p $folder
             cp -r _output/$framework/$runtime/publish/* $folder
-            cp -r _output/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
             cp LICENSE.md $folder
 
             echo "Removing Service helpers"
@@ -125,52 +122,8 @@ runs:
             echo "Removing Sonarr.Windows"
             rm $folder/Sonarr.Windows.*
 
-            echo "Adding Sonarr.Mono to UpdatePackage"
-            cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Openur.Mono.Unix.* $folder/Sonarr.Update
-            cp $folder/libMono.Unix.* $folder/Sonarr.Update
-            ;;
-          win)
-            folder=_artifacts/$runtime/$framework/Sonarr
-
-            echo "Packaging files"
-            rm -rf $folder
-            mkdir -p $folder
-            cp -r _output/$framework/$runtime/publish/* $folder
-            cp -r _output/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
-            cp LICENSE.md $folder
-            cp -r _output/$framework-windows/$runtime/publish/* $folder
-
-            echo "Removing Sonarr.Mono"
-            rm -f $folder/Sonarr.Mono.*
-            rm -f $folder/Openur.Mono.Unix.*
-            rm -f $folder/libMono.Unix.*
-
-            echo "Adding Sonarr.Windows to UpdatePackage"
-            cp $folder/Sonarr.Windows.* $folder/Sonarr.Update
-
-            ;;
-          osx)
-            folder=_artifacts/$runtime/$framework/Sonarr
-
-            echo "Packaging files"
-            rm -rf $folder
-            mkdir -p $folder
-            cp -r _output/$framework/$runtime/publish/* $folder
-            cp -r _output/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
-            cp LICENSE.md $folder
-
-            echo "Removing Service helpers"
-            rm -f $folder/ServiceUninstall.*
-            rm -f $folder/ServiceInstall.*
-
-            echo "Removing Sonarr.Windows"
-            rm $folder/Sonarr.Windows.*
-
-            echo "Adding Sonarr.Mono to UpdatePackage"
-            cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Openur.Mono.Unix.* $folder/Sonarr.Update
-            cp $folder/libMono.Unix.* $folder/Sonarr.Update
+            echo "Removing Sonarr.Update"
+            rm -rf $folder/Sonarr.Update
             ;;
         esac
 

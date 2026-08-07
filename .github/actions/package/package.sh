@@ -31,43 +31,14 @@ do
   find $sonarrFolder -name "ffprobe" -exec chmod a+x {} \;
   find $sonarrFolder -name "Sonarr" -exec chmod a+x {} \;
   
-  if [[ "$name" == *"osx"* ]]; then
-    echo "Creating macOS package"
-      
-    packageName="$name-app"
-    packageFolder="$outputFolder/$packageName"
-      
-    rm -rf $packageFolder
-    mkdir $packageFolder
-      
-    cp -r distribution/macOS/Sonarr.app $packageFolder
-    mkdir -p $packageFolder/Sonarr.app/Contents/MacOS
-      
-    echo "Copying Binaries"
-    cp -r $sonarrFolder/* $packageFolder/Sonarr.app/Contents/MacOS
-      
-    echo "Removing Update Folder"
-    rm -r $packageFolder/Sonarr.app/Contents/MacOS/Sonarr.Update
-              
-    echo "Packaging macOS app Artifact"
-    (cd $packageFolder; zip -rq "../../$artifactsFolder/$archiveName-app.zip" ./Sonarr.app)
-  fi
 
   echo "Packaging Artifact"
-  if [[ "$name" == *"linux"* ]] || [[ "$name" == *"osx"* ]] || [[ "$name" == *"freebsd"* ]]; then
+  if [[ "$name" == *"linux"* ]]; then
     echo "Removing Update Folder"
     rm -rf $folderName/Sonarr.Update
 
     echo "Packaging app Artifact"
     tar -zcf "./$artifactsFolder/$archiveName.tar.gz" -C $folderName Sonarr
 	fi
-    
-  if [[ "$name" == *"win"* ]]; then
-    if [ "$RUNNER_OS" = "Windows" ]
-      then
-        (cd $folderName; 7z a -tzip "../../../$artifactsFolder/$archiveName.zip" ./Sonarr)
-      else
-      (cd $folderName; zip -rq "../../../$artifactsFolder/$archiveName.zip" ./Sonarr)
-    fi
-	fi
+
 done
