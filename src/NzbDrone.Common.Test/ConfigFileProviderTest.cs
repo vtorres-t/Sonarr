@@ -61,10 +61,6 @@ namespace NzbDrone.Common.Test
             Mocker.GetMock<IOptions<LogOptions>>()
                 .Setup(v => v.Value)
                 .Returns(new LogOptions());
-
-            Mocker.GetMock<IOptions<UpdateOptions>>()
-                .Setup(v => v.Value)
-                .Returns(new UpdateOptions());
         }
 
         [Test]

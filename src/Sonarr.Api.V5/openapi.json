@@ -7830,97 +7830,6 @@
           }
         }
       }
-    },
-    "/api/v5/settings/update": {
-      "get": {
-        "tags": [
-          "UpdateSettings"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateSettingsResource"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v5/settings/update/{id}": {
-      "put": {
-        "tags": [
-          "UpdateSettings"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateSettingsResource"
-              }
-            }
-          }
-        },
-        "responses": {
-          "202": {
-            "description": "Accepted",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateSettingsResource"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "UpdateSettings"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateSettingsResource"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -9534,16 +9443,6 @@
             "nullable": true
           },
           "applicationUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "updateAutomatically": {
-            "type": "boolean"
-          },
-          "updateMechanism": {
-            "$ref": "#/components/schemas/UpdateMechanism"
-          },
-          "updateScriptPath": {
             "type": "string",
             "nullable": true
           },
@@ -13165,7 +13064,6 @@
           "osName",
           "osVersion",
           "packageAuthor",
-          "packageUpdateMechanismMessage",
           "packageVersion",
           "runtimeName",
           "runtimeVersion",
@@ -13269,13 +13167,6 @@
             "nullable": true
           },
           "packageAuthor": {
-            "type": "string",
-            "nullable": true
-          },
-          "packageUpdateMechanism": {
-            "$ref": "#/components/schemas/UpdateMechanism"
-          },
-          "packageUpdateMechanismMessage": {
             "type": "string",
             "nullable": true
           },
@@ -13580,99 +13471,6 @@
         },
         "additionalProperties": false
       },
-      "UpdateMechanism": {
-        "enum": [
-          "builtIn",
-          "script",
-          "external",
-          "apt",
-          "docker"
-        ],
-        "type": "string"
-      },
-      "UpdateResource": {
-        "required": [
-          "branch",
-          "changes",
-          "fileName",
-          "hash",
-          "url",
-          "version"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "version": {
-            "type": "string",
-            "nullable": true
-          },
-          "branch": {
-            "type": "string",
-            "nullable": true
-          },
-          "releaseDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "fileName": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
-            "type": "string",
-            "nullable": true
-          },
-          "installed": {
-            "type": "boolean"
-          },
-          "installedOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "installable": {
-            "type": "boolean"
-          },
-          "latest": {
-            "type": "boolean"
-          },
-          "changes": {
-            "$ref": "#/components/schemas/UpdateChanges"
-          },
-          "hash": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateSettingsResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "branch": {
-            "type": "string",
-            "nullable": true
-          },
-          "updateAutomatically": {
-            "type": "boolean"
-          },
-          "updateMechanism": {
-            "$ref": "#/components/schemas/UpdateMechanism"
-          },
-          "updateScriptPath": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ValidationFailure": {
         "type": "object",
         "properties": {
@@ -13938,9 +13736,6 @@
     },
     {
       "name": "UpdateLogFile"
-    },
-    {
-      "name": "UpdateSettings"
     }
   ]
 }

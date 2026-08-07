@@ -7585,28 +7585,6 @@
         }
       }
     },
-    "/api/v3/update": {
-      "get": {
-        "tags": [
-          "Update"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UpdateResource"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v3/log/file/update": {
       "get": {
         "tags": [
@@ -9056,9 +9034,6 @@
           },
           "updateAutomatically": {
             "type": "boolean"
-          },
-          "updateMechanism": {
-            "$ref": "#/components/schemas/UpdateMechanism"
           },
           "updateScriptPath": {
             "type": "string",
@@ -12139,13 +12114,6 @@
             "type": "string",
             "nullable": true
           },
-          "packageUpdateMechanism": {
-            "$ref": "#/components/schemas/UpdateMechanism"
-          },
-          "packageUpdateMechanismMessage": {
-            "type": "string",
-            "nullable": true
-          },
           "databaseVersion": {
             "type": "string",
             "nullable": true
@@ -12406,16 +12374,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "UpdateMechanism": {
-        "enum": [
-          "builtIn",
-          "script",
-          "external",
-          "apt",
-          "docker"
-        ],
-        "type": "string"
       },
       "UpdateResource": {
         "type": "object",

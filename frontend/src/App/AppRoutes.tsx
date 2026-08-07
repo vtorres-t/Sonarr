@@ -28,7 +28,6 @@ import LogsTable from 'System/Events/LogsTable';
 import Logs from 'System/Logs/Logs';
 import Status from 'System/Status/Status';
 import Tasks from 'System/Tasks/Tasks';
-import Updates from 'System/Updates/Updates';
 import CutoffUnmet from 'Wanted/CutoffUnmet/CutoffUnmet';
 import Missing from 'Wanted/Missing/Missing';
 
@@ -125,8 +124,6 @@ export function appRouteElements() {
       <Route path="/system/tasks" element={<Tasks />} />
 
       <Route path="/system/backup" element={<Backups />} />
-
-      <Route path="/system/updates" element={<Updates />} />
 
       <Route path="/system/events" element={<LogsTable />} />
 

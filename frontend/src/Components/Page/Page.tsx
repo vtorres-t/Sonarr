@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { saveDimensions, useAppValue } from 'App/appStore';
-import AppUpdatedModal from 'App/AppUpdatedModal';
 import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModal from 'App/ConnectionLostModal';
 import SignalRListener from 'Components/SignalRListener';
@@ -19,12 +18,10 @@ interface PageProps {
 }
 
 function Page({ children }: PageProps) {
-  const isUpdated = useAppValue('isUpdated');
   const isDisconnected = useAppValue('isDisconnected');
   const version = useAppValue('version');
   const { hasError, errors, isPopulated, isLocalStorageSupported } =
     useAppPage();
-  const [isUpdatedModalOpen, setIsUpdatedModalOpen] = useState(false);
   const [isConnectionLostModalOpen, setIsConnectionLostModalOpen] =
     useState(false);
 
@@ -32,10 +29,6 @@ function Page({ children }: PageProps) {
   const { authentication } = useSystemStatusData();
 
   const authenticationEnabled = authentication !== 'none';
-
-  const handleUpdatedModalClose = useCallback(() => {
-    setIsUpdatedModalOpen(false);
-  }, []);
 
   const handleResize = useCallback(() => {
     saveDimensions({
@@ -57,12 +50,6 @@ function Page({ children }: PageProps) {
       setIsConnectionLostModalOpen(true);
     }
   }, [isDisconnected]);
-
-  useEffect(() => {
-    if (isUpdated) {
-      setIsUpdatedModalOpen(true);
-    }
-  }, [isUpdated]);
 
   if (hasError || !isLocalStorageSupported) {
     return (
@@ -90,11 +77,6 @@ function Page({ children }: PageProps) {
 
           {children}
         </div>
-
-        <AppUpdatedModal
-          isOpen={isUpdatedModalOpen}
-          onModalClose={handleUpdatedModalClose}
-        />
 
         <ConnectionLostModal isOpen={isConnectionLostModalOpen} />
 

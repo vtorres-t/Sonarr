@@ -178,7 +178,6 @@
     "BlocklistReleases": "Lista de bloqueos de lanzamientos",
     "Blocklisted": "Bloqueado",
     "BlocklistedAt": "Bloqueado el {date}",
-    "Branch": "Rama",
     "BranchUpdate": "Rama a usar para actualizar {appName}",
     "BranchUpdateMechanism": "Rama usada por un mecanismo de actualización externo",
     "BrowserReloadRequired": "Recarga de Navegador Requerida",

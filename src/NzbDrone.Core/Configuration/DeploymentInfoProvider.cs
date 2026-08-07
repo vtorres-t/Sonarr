@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -14,14 +13,8 @@ namespace NzbDrone.Core.Configuration
         string PackageAuthor { get; }
         string PackageGlobalMessage { get; }
         string PackageBranch { get; }
-        UpdateMechanism PackageUpdateMechanism { get; }
-        string PackageUpdateMechanismMessage { get; }
-
         string ReleaseVersion { get; }
         string ReleaseBranch { get; }
-
-        bool IsExternalUpdateMechanism { get; }
-        UpdateMechanism DefaultUpdateMechanism { get; }
         string DefaultBranch { get; }
     }
 
@@ -33,7 +26,6 @@ namespace NzbDrone.Core.Configuration
             var packageInfoPath = Path.Combine(bin, "..", "package_info");
             var releaseInfoPath = Path.Combine(bin, "release_info");
 
-            PackageUpdateMechanism = UpdateMechanism.BuiltIn;
             DefaultBranch = "master";
 
             if (Path.GetFileName(bin) == "bin" && diskProvider.FileExists(packageInfoPath))
@@ -43,9 +35,6 @@ namespace NzbDrone.Core.Configuration
                 PackageVersion = ReadValue(data, "PackageVersion");
                 PackageAuthor = ReadValue(data, "PackageAuthor");
                 PackageGlobalMessage = ReadValue(data, "PackageGlobalMessage");
-                PackageUpdateMechanism = ReadEnumValue(data, "UpdateMethod", UpdateMechanism.BuiltIn);
-                PackageUpdateMechanismMessage = ReadValue(data, "UpdateMethodMessage");
-                PackageBranch = ReadValue(data, "Branch");
 
                 ReleaseVersion = ReadValue(data, "ReleaseVersion");
 
@@ -60,15 +49,12 @@ namespace NzbDrone.Core.Configuration
                 var data = diskProvider.ReadAllText(releaseInfoPath);
 
                 ReleaseVersion = ReadValue(data, "ReleaseVersion", ReleaseVersion);
-                ReleaseBranch = ReadValue(data, "Branch");
 
                 if (ReleaseBranch.IsNotNullOrWhiteSpace())
                 {
                     DefaultBranch = ReleaseBranch;
                 }
             }
-
-            DefaultUpdateMechanism = PackageUpdateMechanism;
         }
 
         private static string ReadValue(string fileData, string key, string defaultValue = null)
@@ -98,14 +84,8 @@ namespace NzbDrone.Core.Configuration
         public string PackageAuthor { get; private set; }
         public string PackageGlobalMessage { get; private set; }
         public string PackageBranch { get; private set; }
-        public UpdateMechanism PackageUpdateMechanism { get; private set; }
-        public string PackageUpdateMechanismMessage { get; private set; }
-
         public string ReleaseVersion { get; private set; }
         public string ReleaseBranch { get; set; }
-
-        public bool IsExternalUpdateMechanism => PackageUpdateMechanism >= UpdateMechanism.External;
-        public UpdateMechanism DefaultUpdateMechanism { get; private set; }
         public string DefaultBranch { get; private set; }
     }
 }

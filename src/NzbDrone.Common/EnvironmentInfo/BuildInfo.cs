@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace NzbDrone.Common.EnvironmentInfo
@@ -13,23 +12,12 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             Version = assembly.GetName().Version;
 
-            var attributes = assembly.GetCustomAttributes(true);
-
-            Branch = "unknown";
-
-            var config = attributes.OfType<AssemblyConfigurationAttribute>().FirstOrDefault();
-            if (config != null)
-            {
-                Branch = config.Configuration;
-            }
-
-            Release = $"{Version}-{Branch}";
+            Release = $"{Version}";
         }
 
         public static string AppName { get; } = "Sonarr";
 
         public static Version Version { get; }
-        public static string Branch { get; }
         public static string Release { get; }
 
         public static DateTime BuildDateTime
