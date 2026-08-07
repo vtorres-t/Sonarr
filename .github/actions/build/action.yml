@@ -92,7 +92,7 @@ runs:
 
         echo "Building Sonarr for $runtime, Platform: $platform"
 
-        dotnet msbuild -restore $slnFile -p:SelfContained=true -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$runtime -p:EnableWindowsTargeting=true -p:SatelliteResourceLanguages="en;es" -t:PublishAllRids
+        dotnet msbuild -restore $slnFile -p:SelfContained=true -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$runtime -p:EnableWindowsTargeting=true -p:'SatelliteResourceLanguages="en;es"' -t:PublishAllRids
 
     - name: Package
       shell: bash
