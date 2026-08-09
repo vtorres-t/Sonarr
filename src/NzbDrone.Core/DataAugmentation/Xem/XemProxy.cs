@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common.Http;
@@ -20,6 +21,12 @@ namespace NzbDrone.Core.DataAugmentation.Xem
     {
         private const string ROOT_URL = "https://thexem.info/map/";
 
+        // CONFIGURACIÓN DEL RATE LIMITER
+        // 2000 milisegundos = 2 segundos de espera entre peticiones consecutivas
+        private const int MIN_DELAY_MS = 2000;
+        private static readonly object _rateLimitLock = new object();
+        private static DateTime _lastRequestTime = DateTime.MinValue;
+
         private readonly Logger _logger;
         private readonly IHttpClient _httpClient;
         private readonly IHttpRequestBuilderFactory _xemRequestBuilder;
@@ -36,6 +43,27 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 .CreateFactory();
         }
 
+        /// <block>
+        /// Método auxiliar centralizado para aplicar el Rate Limit antes de cada petición HTTP saliente
+        /// </block>
+        private void ApplyRateLimit()
+        {
+            lock (_rateLimitLock)
+            {
+                var elapsed = DateTime.UtcNow - _lastRequestTime;
+                var remainingDelay = MIN_DELAY_MS - (int)elapsed.TotalMilliseconds;
+
+                if (remainingDelay > 0)
+                {
+                    _logger.Debug("Rate Limiter activado: Esperando {0}ms antes de realizar la siguiente llamada a XEM...", remainingDelay);
+                    Thread.Sleep(remainingDelay);
+                }
+
+                // Actualizamos la marca de tiempo justo antes de permitir que la petición se ejecute
+                _lastRequestTime = DateTime.UtcNow;
+            }
+        }
+
         public List<int> GetXemSeriesIds()
         {
             _logger.Debug("Fetching Series IDs from");
@@ -44,6 +72,8 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                                             .Resource("/havemap")
                                             .Build();
 
+            // Aplicamos control de flujo
+            ApplyRateLimit();
             var response = _httpClient.Get<XemResult<List<string>>>(request).Resource;
             CheckForFailureResult(response);
 
@@ -64,6 +94,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                                             .AddQueryParam("id", id)
                                             .Build();
 
+            ApplyRateLimit();
             var response = _httpClient.Get<XemResult<List<XemSceneTvdbMapping>>>(request).Resource;
 
             return response.Data.Where(c => c.Scene != null).ToList();
@@ -78,6 +109,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                                             .AddQueryParam("seasonNumbers", true)
                                             .Build();
 
+            ApplyRateLimit();
             var response = _httpClient.Get<XemResult<Dictionary<int, List<JObject>>>>(request).Resource;
 
             var result = new List<SceneMapping>();
@@ -100,13 +132,13 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                         }
 
                         result.Add(new SceneMapping
-                                   {
-                                       MappingId = $"x-{series.Key}_S{seasonNumber}_{n.Key.Replace(' ', '_')}",
-                                       Title = n.Key,
-                                       SearchTerm = n.Key,
-                                       SceneSeasonNumber = seasonNumber,
-                                       TvdbId = series.Key
-                                   });
+                        {
+                            MappingId = $"x-{series.Key}_S{seasonNumber}_{n.Key.Replace(' ', '_')}",
+                            Title = n.Key,
+                            SearchTerm = n.Key,
+                            SceneSeasonNumber = seasonNumber,
+                            TvdbId = series.Key
+                        });
                     }
                 }
             }
