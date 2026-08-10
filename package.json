@@ -5,14 +5,14 @@
   "scripts": {
     "build": "webpack --config ./frontend/build/webpack.config.js",
     "prebuild": "yarn clean",
-    "clean": "rimraf ./_output/UI && rimraf --glob \"**/*.js.map\"",
+    "clean": "rimraf ./_output/UI && rimraf --glob \"**/*.js.map\" && rimraf --glob \"**/*.css.map\"",
     "start": "webpack --watch --config ./frontend/build/webpack.config.js",
     "watch": "webpack --watch --config ./frontend/build/webpack.config.js",
     "lint": "eslint --config frontend/.eslintrc.js --ignore-path frontend/.eslintignore frontend/",
     "lint-fix": "yarn lint --fix",
     "stylelint": "stylelint \"frontend/**/*.css\" --config frontend/.stylelintrc"
   },
-  "repository": "https://github.com/Sonarr/Sonarr",
+  "repository": "https://github.com/vtorres-t/Sonarr",
   "author": "Team Sonarr",
   "license": "GPL-3.0",
   "readmeFilename": "readme.md",

@@ -154,10 +154,6 @@ const LINKS: SidebarItem[] = [
         to: '/settings/metadata',
       },
       {
-        title: () => translate('MetadataSource'),
-        to: '/settings/metadatasource',
-      },
-      {
         title: () => translate('Tags'),
         to: '/settings/tags',
       },
@@ -189,10 +185,6 @@ const LINKS: SidebarItem[] = [
       {
         title: () => translate('Backup'),
         to: '/system/backup',
-      },
-      {
-        title: () => translate('Updates'),
-        to: '/system/updates',
       },
       {
         title: () => translate('Events'),

@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
@@ -176,10 +175,6 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
   return (
     <TableRow>
-      <TableRowCell className={styles.protocol}>
-        <ProtocolLabel protocol={protocol} />
-      </TableRowCell>
-
       <TableRowCell
         className={styles.age}
         title={formatDateTime(publishDate, longDateFormat, timeFormat, {

@@ -16,7 +16,6 @@ import ImportListSettings from 'Settings/ImportLists/ImportListSettings';
 import IndexerSettings from 'Settings/Indexers/IndexerSettings';
 import MediaManagement from 'Settings/MediaManagement/MediaManagement';
 import MetadataSettings from 'Settings/Metadata/MetadataSettings';
-import MetadataSourceSettings from 'Settings/MetadataSource/MetadataSourceSettings';
 import NotificationSettings from 'Settings/Notifications/NotificationSettings';
 import Profiles from 'Settings/Profiles/Profiles';
 import Quality from 'Settings/Quality/Quality';
@@ -29,7 +28,6 @@ import LogsTable from 'System/Events/LogsTable';
 import Logs from 'System/Logs/Logs';
 import Status from 'System/Status/Status';
 import Tasks from 'System/Tasks/Tasks';
-import Updates from 'System/Updates/Updates';
 import CutoffUnmet from 'Wanted/CutoffUnmet/CutoffUnmet';
 import Missing from 'Wanted/Missing/Missing';
 
@@ -111,11 +109,6 @@ export function appRouteElements() {
 
       <Route path="/settings/metadata" element={<MetadataSettings />} />
 
-      <Route
-        path="/settings/metadatasource"
-        element={<MetadataSourceSettings />}
-      />
-
       <Route path="/settings/tags" element={<TagSettings />} />
 
       <Route path="/settings/general" element={<GeneralSettings />} />
@@ -131,8 +124,6 @@ export function appRouteElements() {
       <Route path="/system/tasks" element={<Tasks />} />
 
       <Route path="/system/backup" element={<Backups />} />
-
-      <Route path="/system/updates" element={<Updates />} />
 
       <Route path="/system/events" element={<LogsTable />} />
 

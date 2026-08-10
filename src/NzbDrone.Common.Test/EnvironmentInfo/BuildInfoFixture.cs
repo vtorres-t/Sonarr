@@ -12,12 +12,5 @@ namespace NzbDrone.Common.Test.EnvironmentInfo
         {
             BuildInfo.Version.Major.Should().BeOneOf(5, 10);
         }
-
-        [Test]
-        public void should_get_branch()
-        {
-            BuildInfo.Branch.Should().NotBe("unknown");
-            BuildInfo.Branch.Should().NotBeNullOrWhiteSpace();
-        }
     }
 }

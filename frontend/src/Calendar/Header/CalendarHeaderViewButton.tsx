@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { CalendarView } from 'Calendar/calendarViews';
 import Button, { ButtonProps } from 'Components/Link/Button';
 import titleCase from 'Utilities/String/titleCase';
+import translate from 'Utilities/String/translate';
 
 interface CalendarHeaderViewButtonProps
   extends Omit<ButtonProps, 'children' | 'onPress'> {
@@ -26,7 +27,7 @@ function CalendarHeaderViewButton({
       {...otherProps}
       onPress={handlePress}
     >
-      {titleCase(view)}
+      {translate(titleCase(view))}
     </Button>
   );
 }

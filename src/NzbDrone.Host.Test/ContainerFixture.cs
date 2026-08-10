@@ -50,7 +50,6 @@ namespace NzbDrone.App.Test
             container.RegisterInstance<IOptions<AuthOptions>>(new Mock<IOptions<AuthOptions>>().Object);
             container.RegisterInstance<IOptions<AppOptions>>(new Mock<IOptions<AppOptions>>().Object);
             container.RegisterInstance<IOptions<ServerOptions>>(new Mock<IOptions<ServerOptions>>().Object);
-            container.RegisterInstance<IOptions<UpdateOptions>>(new Mock<IOptions<UpdateOptions>>().Object);
             container.RegisterInstance<IOptions<LogOptions>>(new Mock<IOptions<LogOptions>>().Object);
 
             _container = container.GetServiceProvider();

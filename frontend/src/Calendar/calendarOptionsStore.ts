@@ -16,13 +16,13 @@ export interface CalendarOptions {
 const { useOptions, useOption, getOptions, getOption, setOptions, setOption } =
   createOptionsStore<CalendarOptions>('calendar_options', () => {
     return {
-      collapseMultipleEpisodes: false,
+      collapseMultipleEpisodes: true,
       showEpisodeInformation: true,
-      showFinaleIcon: false,
-      showSpecialIcon: false,
+      showFinaleIcon: true,
+      showSpecialIcon: true,
       showCutoffUnmetIcon: false,
-      fullColorEvents: false,
-      selectedFilterKey: 'monitored',
+      fullColorEvents: true,
+      selectedFilterKey: 'all',
       view: window.innerWidth > 768 ? 'week' : 'day',
     };
   });

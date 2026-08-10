@@ -4,7 +4,7 @@ TYPE=$2
 COVERAGE=$3
 WHERE="Category!=ManualTest"
 TEST_PATTERN="*Test.dll"
-FILES=( "Sonarr.Api.Test.dll" "Sonarr.Automation.Test.dll" "Sonarr.Common.Test.dll" "Sonarr.Core.Test.dll" "Sonarr.Host.Test.dll" "Sonarr.Integration.Test.dll" "Sonarr.Libraries.Test.dll" "Sonarr.Mono.Test.dll" "Sonarr.Update.Test.dll" "Sonarr.Windows.Test.dll" )
+FILES=( "Sonarr.Api.Test.dll" "Sonarr.Automation.Test.dll" "Sonarr.Common.Test.dll" "Sonarr.Core.Test.dll" "Sonarr.Host.Test.dll" "Sonarr.Integration.Test.dll" "Sonarr.Libraries.Test.dll" "Sonarr.Mono.Test.dll" " "Sonarr.Windows.Test.dll" )
 ASSMEBLIES=""
 TEST_LOG_FILE="TestLog.txt"
 
@@ -34,14 +34,8 @@ if [ "$PLATFORM" = "Mac" ]; then
   # export DYLD_PRINT_LIBRARIES=YES
 fi
 
-if [ "$PLATFORM" = "Windows" ]; then
-  mkdir -p "$ProgramData/Sonarr"
-  WHERE="$WHERE&Category!=LINUX"
-elif [ "$PLATFORM" = "Linux" ]; then
+if [ "$PLATFORM" = "Linux" ]; then
   mkdir -p ~/.config/Sonarr
-  WHERE="$WHERE&Category!=WINDOWS"
-elif  [ "$PLATFORM" = "Mac" ]; then
-  mkdir -p ~/Library/Application\ Support/Sonarr
   WHERE="$WHERE&Category!=WINDOWS"
 else
   echo "Platform must be provided as first argument: Windows, Linux or Mac"

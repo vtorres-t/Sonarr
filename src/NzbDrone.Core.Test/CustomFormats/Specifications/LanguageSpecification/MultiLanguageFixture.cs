@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
                 Languages = new List<Language>
                 {
                     Language.English,
-                    Language.French
+                    Language.Spanish
                 },
                 Filename = "Series.Title.S01E01"
             };
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         [Test]
         public void should_match_one_language()
         {
-            Subject.Value = Language.French.Id;
+            Subject.Value = Language.Spanish.Id;
             Subject.Negate = false;
 
             Subject.IsSatisfiedBy(_input).Should().BeTrue();
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         [Test]
         public void should_match_language_if_other_languages_are_present()
         {
-            Subject.Value = Language.French.Id;
+            Subject.Value = Language.Spanish.Id;
             Subject.ExceptLanguage = true;
             Subject.Negate = false;
 
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         [Test]
         public void should_not_match_different_language()
         {
-            Subject.Value = Language.Spanish.Id;
+            Subject.Value = Language.French.Id;
             Subject.Negate = false;
 
             Subject.IsSatisfiedBy(_input).Should().BeFalse();
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         [Test]
         public void should_not_match_negated_when_one_language_matches()
         {
-            Subject.Value = Language.French.Id;
+            Subject.Value = Language.Spanish.Id;
             Subject.Negate = true;
 
             Subject.IsSatisfiedBy(_input).Should().BeFalse();
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         [Test]
         public void should_not_match_negated_when_all_languages_do_not_match()
         {
-            Subject.Value = Language.Spanish.Id;
+            Subject.Value = Language.French.Id;
             Subject.Negate = true;
 
             Subject.IsSatisfiedBy(_input).Should().BeTrue();

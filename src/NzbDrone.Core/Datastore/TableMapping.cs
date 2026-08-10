@@ -40,7 +40,6 @@ using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tags;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Update.History;
 using static Dapper.SqlMapper;
 
 namespace NzbDrone.Core.Datastore
@@ -171,7 +170,6 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<DownloadHistory>("DownloadHistory").RegisterModel();
 
-            Mapper.Entity<UpdateHistory>("UpdateHistory").RegisterModel();
             Mapper.Entity<ImportListExclusion>("ImportListExclusions").RegisterModel();
 
             Mapper.Entity<AutoTagging.AutoTag>("AutoTagging").RegisterModel();

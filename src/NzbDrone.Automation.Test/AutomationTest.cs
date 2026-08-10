@@ -36,10 +36,10 @@ namespace NzbDrone.Automation.Test
         {
             var options = new ChromeOptions();
             options.AddArguments("--headless");
-            var service = ChromeDriverService.CreateDefaultService();
+            options.PageLoadTimeout = TimeSpan.FromMinutes(3);
 
-            // Timeout as windows automation tests seem to take alot longer to get going
-            driver = new ChromeDriver(service, options, TimeSpan.FromMinutes(3));
+            var service = ChromeDriverService.CreateDefaultService();
+            driver = new ChromeDriver(service, options);
 
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 
@@ -68,7 +68,7 @@ namespace NzbDrone.Automation.Test
             try
             {
                 var image = ((ITakesScreenshot)driver).GetScreenshot();
-                image.SaveAsFile($"./{name}_test_screenshot.png", ScreenshotImageFormat.Png);
+                image.SaveAsFile($"./{name}_test_screenshot.png");
             }
             catch (Exception ex)
             {

@@ -12,7 +12,6 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
-using NzbDrone.Core.Update.History.Events;
 
 namespace NzbDrone.Core.Notifications
 {
@@ -27,7 +26,6 @@ namespace NzbDrone.Core.Notifications
           IHandle<EpisodeFileDeletedEvent>,
           IHandle<HealthCheckFailedEvent>,
           IHandle<HealthCheckRestoredEvent>,
-          IHandle<UpdateInstalledEvent>,
           IHandle<ManualInteractionRequiredEvent>,
           IHandleAsync<DeleteCompletedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
@@ -303,28 +301,6 @@ namespace NzbDrone.Core.Notifications
                 {
                     _notificationStatusService.RecordFailure(notification.Definition.Id);
                     _logger.Warn(ex, "Unable to send OnRename notification to: " + notification.Definition.Name);
-                }
-            }
-        }
-
-        public void Handle(UpdateInstalledEvent message)
-        {
-            var updateMessage = new ApplicationUpdateMessage();
-            updateMessage.Message = $"Sonarr updated from {message.PreviousVerison.ToString()} to {message.NewVersion.ToString()}";
-            updateMessage.PreviousVersion = message.PreviousVerison;
-            updateMessage.NewVersion = message.NewVersion;
-
-            foreach (var notification in _notificationFactory.OnApplicationUpdateEnabled())
-            {
-                try
-                {
-                    notification.OnApplicationUpdate(updateMessage);
-                    _notificationStatusService.RecordSuccess(notification.Definition.Id);
-                }
-                catch (Exception ex)
-                {
-                    _notificationStatusService.RecordFailure(notification.Definition.Id);
-                    _logger.Warn(ex, "Unable to send OnApplicationUpdate notification to: " + notification.Definition.Name);
                 }
             }
         }

@@ -6,12 +6,10 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Update.Commands;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Messaging.Commands
@@ -94,12 +92,6 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             var command2 = new EpisodeSearchCommand(new List<int>());
 
             CommandEqualityComparer.Instance.Equals(command1, command2).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_false_when_commands_are_diffrent_types()
-        {
-            CommandEqualityComparer.Instance.Equals(new RssSyncCommand(), new ApplicationUpdateCommand()).Should().BeFalse();
         }
 
         [Test]

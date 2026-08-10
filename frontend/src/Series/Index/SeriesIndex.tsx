@@ -17,6 +17,7 @@ import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptions
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { DESCENDING } from 'Helpers/Props/sortDirections';
+import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import ParseToolbarButton from 'Parse/ParseToolbarButton';
 import NoSeries from 'Series/NoSeries';
 import {
@@ -82,6 +83,17 @@ function SeriesIndex() {
     undefined
   );
   const [isSelectMode, setIsSelectMode] = useState(false);
+
+  const [isInteractiveImportModalOpen, setIsInteractiveImportModalOpen] =
+    useState(false);
+
+  const handleInteractiveImportPress = useCallback(() => {
+    setIsInteractiveImportModalOpen(true);
+  }, []);
+
+  const handleInteractiveImportModalClose = useCallback(() => {
+    setIsInteractiveImportModalOpen(false);
+  }, []);
 
   const onRssSyncPress = useCallback(() => {
     executeCommand({
@@ -229,6 +241,11 @@ function SeriesIndex() {
 
               <PageToolbarSeparator />
               <ParseToolbarButton />
+              <PageToolbarButton
+                label={translate('ManualImport')}
+                iconName={icons.INTERACTIVE}
+                onPress={handleInteractiveImportPress}
+              />
             </PageToolbarSection>
 
             <PageToolbarSection
@@ -339,6 +356,10 @@ function SeriesIndex() {
               onModalClose={onOptionsModalClose}
             />
           ) : null}
+          <InteractiveImportModal
+            isOpen={isInteractiveImportModalOpen}
+            onModalClose={handleInteractiveImportModalClose}
+          />
         </PageContent>
       </SelectProvider>
     </QueueDetailsProvider>
